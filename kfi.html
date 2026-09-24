@@ -1,0 +1,239 @@
+---
+# FILE: kfi.html
+# PURPOSE: 'Weekly Excerpts' page — Krishnamurti Foundation India video/excerpt listings,
+# tabbed by academic year. Custom inline JS handles tab switching (see switchAcademicYear()).
+layout: page
+title: "Weekly Excerpts"
+permalink: /kfi/
+---
+
+<!-- Jekyll Liquid Logic: Defines available years and initial active tab -->
+{% assign year_blocks = "2025" | split: "|" %}
+{% assign default_active_year = "2025" %}
+
+
+<!-- Anchor element target for automatic smooth scrolling on tab change -->
+<div id="top" style="scroll-margin-top: 200px;"></div>
+
+<!-- Academic Year Tab Navigation Bar -->
+<div class="tabs-container">
+  <div class="academic-tabs">
+    <!-- Loop through each year defined in year_blocks array -->
+    {% for current_year in year_blocks %}
+      {% if current_year == "archive" %}
+        {% assign tab_label = "Archive" %}
+        {% assign target_val = "archive" %}
+      {% else %}
+        {% assign start_yr = current_year | plus: 0 %}
+        {% assign short_end_yr = start_yr | plus: 1 | slice: 2, 2 %}
+        {% assign tab_label = start_yr | append: "–" | append: short_end_yr %}
+        {% assign target_val = current_year %}
+      {% endif %}
+      
+      <!-- Render interactive tab button -->
+      <button 
+        class="tab-link {% if current_year == default_active_year %}active{% endif %}" 
+        onclick="switchAcademicYear(event, '{{ target_val }}')">
+        {{ tab_label }}
+      </button>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Main Media Grid Layout Container -->
+<div class="video-grid">
+
+    <!-- Document Link Item (2025) - Light Unto Oneself -->
+    <figure class="video-item" data-year="2025">
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://drive.google.com/file/d/1CRp8Jbd8_oGXVa951jxcnQKQAcePBPxd/view?usp=sharing" target="_blank">Light Unto Oneself</a>, 
+            Published on - Dec 13, 2025
+        </figcaption>
+    </figure>
+    
+    <!-- Document Link Item (2025) - On Education -->
+    <figure class="video-item" data-year="2025">
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://drive.google.com/file/d/1k9yyx9aGJ-aGxygMPTJ1tfpP2D4wWVds/view?usp=sharing" target="_blank">On Education</a>, 
+            Published on - Dec 6, 2025
+        </figcaption>
+    </figure>
+
+    <!-- Embedded Video Card (2025) - Freedom and Authority -->
+    <figure class="video-item" data-year="2025">
+        <div class="video-wrapper" onclick="loadVideo(this)" data-video="wm0lN9K8GNc">
+            <img src="https://img.youtube.com/vi/wm0lN9K8GNc/hqdefault.jpg" class="thumbnail" alt="Freedom and Authority">
+        </div>
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://www.youtube.com/watch?v=nS_YJ9m4XGg" target="_blank">Freedom &amp; Authority</a>, 
+            <a href="https://www.youtube.com/watch?v=hdjl3fkeEfA&amp;list=PLz6qDr1232zSl1tdmcKZ62aJR7kJvkEIO" target="_blank">Playlist on Authority</a><br>
+            Published on - Sep 12, 2025
+        </figcaption>
+    </figure>
+
+    <!-- Embedded Video Card (2025) - On Authority / Ambition -->
+    <figure class="video-item" data-year="2025">
+        <div class="video-wrapper" onclick="loadVideo(this)" data-video="fHEZXF6uR1U">
+            <img src="https://img.youtube.com/vi/fHEZXF6uR1U/hqdefault.jpg" class="thumbnail" alt="On Authority">
+        </div>
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://drive.google.com/file/d/1wrY36iq6db35O6NA3Ur6Q2qC5493i4nT/view" target="_blank">On Ambition</a><br>
+            Published on - Aug 30, 2025
+        </figcaption>
+    </figure>
+
+    <!-- Embedded Video Card (2025) - On Love -->
+    <figure class="video-item" data-year="2025">
+        <div class="video-wrapper" onclick="loadVideo(this)" data-video="ztLEMnrEE2s">
+            <img src="https://img.youtube.com/vi/ztLEMnrEE2s/hqdefault.jpg" class="thumbnail" alt="On Love">
+        </div>
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://drive.google.com/file/d/1ePDu0a0aPkn55thwAkZVQW6M68S4V6_i/view?usp=drive_link" target="_blank">On Love</a><br>
+            Published on - Aug 22, 2025
+        </figcaption>
+    </figure>
+
+    <!-- Embedded Video Card (2025) - Fear and Compassion -->
+    <figure class="video-item" data-year="2025">
+        <div class="video-wrapper" onclick="loadVideo(this)" data-video="ztlt1GeA_nQ">
+            <img src="https://img.youtube.com/vi/ztlt1GeA_nQ/hqdefault.jpg" class="thumbnail" alt="On Love">
+        </div>
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://drive.google.com/file/d/1-P5oOWqtufPozRCWN2WsSTo9krNx_QRC/view" target="_blank">Fear and Compassion</a><br>
+            Published on - Aug 22, 2025
+        </figcaption>
+    </figure>
+
+    <!-- Embedded Video Card (2025) - Art of Listening, Looking and Learning -->
+    <figure class="video-item" data-year="2025">
+        <div class="video-wrapper" onclick="loadVideo(this)" data-video="Ke32Z2KkS6w">
+            <img src="https://img.youtube.com/vi/Ke32Z2KkS6w/hqdefault.jpg" class="thumbnail" alt="Art of Listening, Looking and Learning">
+        </div>
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://journal.kfionline.org/issue-4/the-arts-of-listening-looking-and-learning" target="_blank">Art of Listening, Looking and Learning </a>, 
+            <br>
+            Published on - Aug 8, 2025
+        </figcaption>
+    </figure>
+
+    <!-- Embedded Video Card (2025) - Freedom and Discipline -->
+    <figure class="video-item" data-year="2025">
+        <div class="video-wrapper" onclick="loadVideo(this)" data-video="f-3wSP0Au8o">
+            <img src="https://img.youtube.com/vi/f-3wSP0Au8o/hqdefault.jpg" class="thumbnail" alt="Freedom and Discipline">
+        </div>
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://docs.google.com/document/d/1doNEuiwZzAHul9JZGApYg9zOadnFaGqdq062YBBDsvY/view" target="_blank">Freedom and Discipline</a>, 
+            <br>
+            Published on - Aug 1, 2025
+        </figcaption>
+    </figure>
+
+    <!-- Embedded Video Card (2025) - The Function of a Parent -->
+    <figure class="video-item" data-year="2025">
+        <div class="video-wrapper" onclick="loadVideo(this)" data-video="ZQGdEvhZl1U">
+            <img src="https://img.youtube.com/vi/ZQGdEvhZl1U/hqdefault.jpg" class="thumbnail" alt="The Function of a Parent">
+        </div>
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://drive.google.com/file/d/1HSnf_oklqeGRheO3vIHJsVfC95vTgrtL/view" target="_blank">The Function of a Parent</a>, 
+            <br>
+            Published on - July 25, 2025
+        </figcaption>
+    </figure>
+
+    <!-- Embedded Video Card (2025) - Total Development of a Child and Parent -->
+    <figure class="video-item" data-year="2025">
+        <div class="video-wrapper" onclick="loadVideo(this)" data-video="5lJRtT4P4ps">
+            <img src="https://img.youtube.com/vi/5lJRtT4P4ps/hqdefault.jpg" class="thumbnail" alt="Total Development of a Child and Parent">
+        </div>
+        <figcaption class="video-caption">
+            Excerpt - <a href="https://drive.google.com/file/d/1-QtHmDQ6J5kf19EQtw_yVNtu7dgWVQ08/view" target="_blank">Total Development of a Child and Parent</a>, 
+            <br>
+            Published on - July 18, 2025
+        </figcaption>
+    </figure>
+    
+    <!-- Placeholder Item (2026) for Future Additions -->
+    <figure class="video-item" data-year="2026">
+        <figcaption class="video-caption">
+            Excerpt - Future 2026 Placeholder Video Link
+        </figcaption>
+    </figure>
+
+</div> 
+
+<!-- Component Stylesheet: Tab Layout, Grid Display, and Media Animations -->
+<!-- Page-specific CSS previously here has been removed:
+     .tabs-container/.academic-tabs/.tab-link (including mobile media
+     query) and @keyframes fadeIn were byte-identical duplicates of the
+     shared newsletter tab styling in custom-styles.css (section 26/29).
+     .video-item's show/hide filter behavior (display:none by default,
+     .active-view reveals it) has been moved to custom-styles.css too
+     (section: KFI PAGE) — it layers on top of the shared .video-item
+     card styling (section 10) without renaming, since it targets a
+     different property (display) with no actual conflict. -->
+
+<!-- Client-side JavaScript for Tab Filtering and Dynamic YouTube Lazy-loading -->
+<script>
+  /**
+   * Toggles the active year filter tab and shows matching video items.
+   * @param {Event|null} evt - User click event or null during initial page initialization.
+   * @param {string} selectedYear - Target year string to filter by (e.g. "2025").
+   */
+  function switchAcademicYear(evt, selectedYear) {
+    // 1. Remove active highlight state from all tab buttons
+    const tabs = document.getElementsByClassName("tab-link");
+    for (let i = 0; i < tabs.length; i++) {
+      tabs[i].classList.remove("active");
+    }
+    
+    // Set active highlight state on clicked button or matching element on load
+    if (evt && evt.currentTarget) {
+      evt.currentTarget.classList.add("active");
+    } else {
+      for (let i = 0; i < tabs.length; i++) {
+        if (tabs[i].getAttribute("onclick").includes(`'${selectedYear}'`)) {
+          tabs[i].classList.add("active");
+          break;
+        }
+      }
+    }
+
+    // 2. Show/hide video items based on their data-year attribute
+    const videoItems = document.getElementsByClassName("video-item");
+    for (let i = 0; i < videoItems.length; i++) {
+      if (videoItems[i].getAttribute("data-year") === selectedYear) {
+        videoItems[i].classList.add("active-view");
+      } else {
+        videoItems[i].classList.remove("active-view");
+      }
+    }
+    
+    // Smooth scroll back to top anchor only on user-initiated tab clicks (not on initial page load)
+    if (evt) {
+      document.getElementById("top").scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // Initialize the gallery with default active year once DOM content loads
+  document.addEventListener("DOMContentLoaded", function() {
+    switchAcademicYear(null, "{{ default_active_year }}");
+  });
+
+  /**
+   * Dynamic YouTube iframe injector: Replaces thumbnail image with playable iframe on click.
+   * Helps minimize initial page load time and bandwidth usage.
+   * @param {HTMLElement} container - The wrapper element holding data-video ID.
+   */
+  function loadVideo(container) {
+    const videoId = container.getAttribute('data-video');
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`);
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+    iframe.setAttribute('allowfullscreen', 'true');
+    
+    // Empty thumbnail and insert interactive iframe player
+    container.innerHTML = '';
+    container.appendChild(iframe);
+  }
+</script>
