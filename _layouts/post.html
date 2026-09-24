@@ -1,0 +1,211 @@
+---
+# FILE: _layouts/post.html
+# PURPOSE: Unified article template used by BOTH the 'posts' and
+# 'activities' collections (merged from separate post.html/events.html
+# templates to eliminate duplicate maintenance).
+# FEATURES:
+# - Back button always navigates via browser history (history.back()),
+#   falling back to page.collection's listing URL (/posts or /activities)
+#   if there's no history to go back to (e.g. a direct link, new tab).
+# - Author profile links (subtitle/subtitle2), with optional profile-link /
+#   profile-link2 overrides for external/manual URLs.
+# - Multi-image gallery, up to 5 images via image/image2..image5 (falls
+#   back to the legacy 'image_id' field name for older activity posts),
+#   with optional per-image alt text via image_alt/image2_alt..image5_alt.
+# - GitHub repository badges, article tags, comments.
+layout: base
+---
+
+<main class="{% if page.full-width %}container-fluid{% else %}container-md{% endif %} post-container">
+  <div class="row">
+    <div class="{% if page.full-width %}col{% else %}col-xl-8 offset-xl-2 col-lg-10 offset-lg-1{% endif %}">
+
+      {% assign back_url = '/posts' %}
+      {% if page.collection == 'activities' %}
+        {% assign back_url = '/activities' %}
+      {% endif %}
+
+      <div class="back-navigation">
+        <a href="{{ back_url }}" id="back-button" onclick="return handleBackNavigation();">
+          <i class="fas fa-chevron-left"></i>
+          Back
+        </a>
+      </div>
+
+      <div class="post-heading">
+        <h1>{{ page.title }}</h1>
+
+        <span class="post-meta">
+          Posted on {{ page.date | date: "%B %-d, %Y" }}
+        </span>
+
+        {% if page.subtitle %}
+          {% comment %}
+            Primary Author URL Determination:
+            1. If 'page.profile-link' exists: Use manual URL, target='_blank', rel='noopener noreferrer'
+            2. Otherwise: Generate slug from 'page.subtitle' (e.g., "Jane Doe" -> "/profiles/jane-doe/"),
+               then check whether a matching profile page actually exists in site.profiles.
+               If not, link to /not_done_yet instead of a URL that would 404.
+          {% endcomment %}
+
+          {% comment %} Build a pipe-delimited list of every real profile slug that exists {% endcomment %}
+          {% assign known_profile_slugs = "" %}
+          {% for profile in site.profiles %}
+            {% assign profile_slug = profile.path | split: "/" | last | remove: ".md" %}
+            {% assign known_profile_slugs = known_profile_slugs | append: "|" | append: profile_slug | append: "|" %}
+          {% endfor %}
+
+          {% if page.profile-link %}
+            {% assign author1_url = page.profile-link %}
+            {% assign author1_target = '_blank' %}
+            {% assign author1_rel = 'noopener noreferrer' %}
+          {% else %}
+            {% assign author1_parts = page.subtitle | split: ' ' %}
+            {% if author1_parts.size > 1 %}
+              {% capture author1_slug %}{{ author1_parts[0] | downcase }}-{{ author1_parts[1] | downcase }}{% endcapture %}
+            {% else %}
+              {% capture author1_slug %}{{ author1_parts[0] | downcase }}{% endcapture %}
+            {% endif %}
+            {% assign author1_needle = "|" | append: author1_slug | append: "|" %}
+            {% if known_profile_slugs contains author1_needle %}
+              {% assign author1_url = '/profiles/' | relative_url | append: author1_slug | append: '/' %}
+            {% else %}
+              {% assign author1_url = '/not_done_yet' | relative_url %}
+            {% endif %}
+            {% assign author1_target = '' %}
+            {% assign author1_rel = '' %}
+          {% endif %}
+
+          <h2 class="post-subheading">
+            by <a href="{{ author1_url }}" {% if author1_target %}target="{{ author1_target }}" rel="{{ author1_rel }}"{% endif %}>{{ page.subtitle }}</a>
+
+            {% if page.subtitle2 %}
+              {% comment %} Same URL/slug determination logic for co-author in 'page.subtitle2' {% endcomment %}
+
+              {% if page.profile-link2 %}
+                {% assign author2_url = page.profile-link2 %}
+                {% assign author2_target = '_blank' %}
+                {% assign author2_rel = 'noopener noreferrer' %}
+              {% else %}
+                {% assign author2_parts = page.subtitle2 | split: ' ' %}
+                {% if author2_parts.size > 1 %}
+                  {% capture author2_slug %}{{ author2_parts[0] | downcase }}-{{ author2_parts[1] | downcase }}{% endcapture %}
+                {% else %}
+                  {% capture author2_slug %}{{ author2_parts[0] | downcase }}{% endcapture %}
+                {% endif %}
+                {% assign author2_needle = "|" | append: author2_slug | append: "|" %}
+                {% if known_profile_slugs contains author2_needle %}
+                  {% assign author2_url = '/profiles/' | relative_url | append: author2_slug | append: '/' %}
+                {% else %}
+                  {% assign author2_url = '/not_done_yet' | relative_url %}
+                {% endif %}
+                {% assign author2_target = '' %}
+                {% assign author2_rel = '' %}
+              {% endif %}
+
+              and <a href="{{ author2_url }}" {% if author2_target %}target="{{ author2_target }}" rel="{{ author2_rel }}"{% endif %}>{{ page.subtitle2 }}</a>
+            {% endif %}
+          </h2>
+        {% endif %}
+
+        <hr class="small">
+      </div>
+
+      {% assign primary_image = page.image | default: page.image_id %}
+      {% assign images = '' | split: '' %}
+      {% if primary_image %}{% assign images = images | push: primary_image %}{% endif %}
+      {% if page.image2 %}{% assign images = images | push: page.image2 %}{% endif %}
+      {% if page.image3 %}{% assign images = images | push: page.image3 %}{% endif %}
+      {% if page.image4 %}{% assign images = images | push: page.image4 %}{% endif %}
+      {% if page.image5 %}{% assign images = images | push: page.image5 %}{% endif %}
+
+      {% assign image_alts = '' | split: '' %}
+      {% if page.image_alt  %}{% assign image_alts = image_alts | push: page.image_alt  %}{% else %}{% assign image_alts = image_alts | push: page.title %}{% endif %}
+      {% if page.image2_alt %}{% assign image_alts = image_alts | push: page.image2_alt %}{% else %}{% assign image_alts = image_alts | push: page.title %}{% endif %}
+      {% if page.image3_alt %}{% assign image_alts = image_alts | push: page.image3_alt %}{% else %}{% assign image_alts = image_alts | push: page.title %}{% endif %}
+      {% if page.image4_alt %}{% assign image_alts = image_alts | push: page.image4_alt %}{% else %}{% assign image_alts = image_alts | push: page.title %}{% endif %}
+      {% if page.image5_alt %}{% assign image_alts = image_alts | push: page.image5_alt %}{% else %}{% assign image_alts = image_alts | push: page.title %}{% endif %}
+
+      {% if images.size > 0 %}
+        <div class="post-image-gallery gallery-{{ images.size }}">
+          {% for img in images %}
+            <div class="post-image-cell">
+              <img
+                src="https://lh3.googleusercontent.com/d/{{ img }}?sz=1200"
+                alt="{{ image_alts[forloop.index0] }}"
+                class="post-img"
+                {% if forloop.index0 > 0 %}loading="lazy"{% endif %}
+              >
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if page.gh-repo %}
+        {% assign gh_split = page.gh-repo | split: '/' %}
+        {% assign gh_user = gh_split[0] %}
+        {% assign gh_repo = gh_split[1] %}
+
+        <div id="header-gh-btns">
+          {% if page.gh-badge.size > 0 %}
+            {% for badge in page.gh-badge %}
+              {% case badge %}
+                {% when 'star' %}
+                  <iframe src="https://ghbtns.com/github-btn.html?user={{ gh_user }}&repo={{ gh_repo }}&type=star&count=true" frameborder="0" scrolling="0" width="120px" height="20px"></iframe>
+                {% when 'watch' %}
+                  <iframe src="https://ghbtns.com/github-btn.html?user={{ gh_user }}&repo={{ gh_repo }}&type=watch&v=2&count=true" frameborder="0" scrolling="0" width="120px" height="20px"></iframe>
+                {% when 'fork' %}
+                  <iframe src="https://ghbtns.com/github-btn.html?user={{ gh_user }}&repo={{ gh_repo }}&type=fork&count=true" frameborder="0" scrolling="0" width="120px" height="20px"></iframe>
+                {% when 'follow' %}
+                  <iframe src="https://ghbtns.com/github-btn.html?user={{ gh_user }}&type=follow&count=true" frameborder="0" scrolling="0" width="220px" height="20px"></iframe>
+              {% endcase %}
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="blog-post">
+        {{ content }}
+      </div>
+
+      <!-- Temporarily disabled, tags are still set on every post's front
+           matter and /tags itself still works, this just stops the
+           per-post "Tags:" line from rendering. Remove the comment tag
+           pair wrapping the block below to restore it. -->
+      {% comment %}
+      {% if page.tags.size > 0 %}
+        <div class="blog-tags">
+          <span>Tags:</span>
+          {% for tag in page.tags %}
+            <a href="{{ '/tags' | relative_url }}#{{ tag }}">{{ tag }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% endcomment %}
+
+      {% include comments.html %}
+
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Back button: always navigates via browser history, so it returns
+     * exactly where the visitor came from (preserving scroll position,
+     * open filters/search on the listing page, etc.) rather than always
+     * routing to the top of /posts or /activities.
+     * Falls back to back_url (the listing page) only when there's no
+     * history to go back to at all -- e.g. the post was opened directly
+     * from a shared link or a new tab, where history.back() would leave
+     * the site entirely or do nothing.
+     */
+    function handleBackNavigation() {
+      if (!document.referrer) {
+        return true; // no history to go back to -- use the href fallback
+      }
+
+      window.history.back();
+      return false;
+    }
+  </script>
+</main>
