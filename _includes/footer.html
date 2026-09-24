@@ -1,0 +1,127 @@
+<!-- FILE: _includes/footer.html — Footer component: contact info (mail/call/email), social links, copyright. -->
+<!-- 
+  FILE: _includes/footer.html
+  PURPOSE: Main footer component displayed on every page
+  
+  SECTIONS:
+  1. Contact Information (3-column layout)
+     - Mail Us: Physical address
+     - Call Us: Phone numbers
+     - Email Us: Email links with student credit note
+  
+  2. Social Links Container
+     - Renders social media icons (configured in _config.yml)
+  
+  3. Copyright & Credits
+     - Dynamic year (auto-updated)
+     - Site attribution and developer credit
+  
+  STYLING:
+  - Uses Bootstrap grid (row, col-md-4)
+  - Centered text on all screen sizes (text-center)
+  - Custom footer styling from custom-styles.css
+  
+  MAINTENANCE NOTES:
+  - Update contact info in the HTML directly or via _config.yml
+  - Social links configured in _config.yml social-network-links section
+  - Student credit note auto-populated from front matter or hardcoded here
+  
+  MAINTAINED BY: Sahyadri Archives Team
+  LAST UPDATED: 2026
+-->
+
+<!-- Main Jekyll Footer Wrapper Component -->
+<footer class="beautiful-jekyll-footer-wrapper">
+  <div class="container-md beautiful-jekyll-footer">
+    
+    <!-- Contact Information Section: 3-column layout for desktop, stacked on mobile -->
+    <!-- FIX 7: Consistent text-center alignment on both mobile and desktop -->
+    <div class="row contact-info-section text-center mb-4">
+      
+      <!-- Column 1: Physical Postal Address -->
+      <div class="col-md-4 mb-4">
+        <h3 class="footer-heading">Mail Us</h3>
+        <p class="footer-body">
+          <strong>Address:</strong><br>
+          Sahyadri School<br>
+          Krishnamurti Foundation India<br>
+          Post: Tiwai Hill, Tal: Rajgurunagar (Khed),<br>
+          Dist: Pune, Pin – 410513, Maharashtra, India
+        </p>
+      </div>
+
+      <!-- Column 2: Phone Contact Numbers -->
+      <div class="col-md-4 mb-4">
+        <h3 class="footer-heading">Call Us</h3>
+        <p class="footer-body">
+          <strong>Telephone:</strong><br>
+          +91 9422304265 / +91 9422304267<br>
+          +91 9422304276 / +91 9422308583
+        </p>
+      </div>
+
+      <!-- Column 3: Direct Email Links & Student IT Committee Acknowledgement -->
+      <div class="col-md-4 mb-4">
+        <h3 class="footer-heading">Email Us</h3>
+        <p class="footer-body">
+          <strong>Email:</strong><br>
+          <a href="mailto:office@sahyadrischool.org" class="footer-link">
+            office@sahyadrischool.org
+          </a>
+        </p>
+        <!-- Credit Box for Student Developers -->
+        <div class="student-credit-box mt-3">
+          <p class="footer-note">
+            <strong>Note:</strong><br>
+            This site was created by Class 11 students (2025–26) while serving on the Student Council's IT Committee along with Bhau Sir, IT Department.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- Section Divider Line -->
+    <hr class="footer-divider">
+
+    <!-- Bottom Footer Row: Social Links, Dynamic Front Matter Extras, Copyright & Credits -->
+    <div class="row">
+      <div class="col-12 text-center">
+        
+        <!-- Social Media Icons Include -->
+        <div class="social-links-container mb-3">
+          {% include social-networks-links.html %}
+        </div>
+
+        <!-- Optional Page-Specific Footer Extras defined in YAML Front Matter -->
+        {% if page.footer-extra -%}
+          <div class="footer-custom-content">
+            {% for file in page.footer-extra -%}
+              {% include {{ file }} %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <!-- Copyright Line with Dynamic Current Year -->
+        <p class="copyright text-muted">
+          SAHYADRI&nbsp;&bull;&nbsp;{{ site.time | date: '%Y' }}
+          {%- if site.url-pretty %}
+            &nbsp;&bull;&nbsp;
+            <span class="author-site">
+              <a href="{% if site.url-canonical %}{{ site.url-canonical }}{% else %}{{ '/' | absolute_url }}{% endif %}">
+                {{ site.url-pretty }}
+              </a>
+            </span>
+          {%- endif %}
+        </p>
+
+        <!-- Developer / Designer Attribution -->
+        <p class="design-credits text-muted">
+          Made by Sailesh Mucheli
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+</footer>
