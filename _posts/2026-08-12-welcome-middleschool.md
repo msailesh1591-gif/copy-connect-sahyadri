@@ -9,7 +9,7 @@ tags: [student-life]
 ---
 Our welcome orientation was for both - the oldies and freshers. It was an icebreaker for us. We were given a tour of campus, a glimpse into our school life this year.
 
-As on the first day there were many activities for us. We did leaf painting with our teachers. We created hanging decorations out of it for our cluster. It was followed by a terrific scavenger hunt.
+As on the first day there were many activities for us. We did leaf painting with our teachers. We created hanging decorations out of it for our cluster. It was followed by a terrific scavenger hunt. 
 
 We had interesting themes around “Togetherness” - We are one, The art of living together, and The beauty of living together. We listened to some beautiful melodies and watched an interesting documentary.
 
@@ -18,3 +18,4 @@ The next day we performed different skits. These skits contained helpful message
 It was followed by handprinting together, and we put it up on our cluster notice board.
 
 All of us had a lot of fun during orientation. It made us think about the life that we will live here as a community and how to lead it peacefully.
+
