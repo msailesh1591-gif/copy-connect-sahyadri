@@ -1,0 +1,11 @@
+/* Force the main content area to 75% width */
+main.container-md, 
+main.container-lg, 
+.container, 
+.container-fluid {
+    max-width: 85% !important;
+    width: 85% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block !important;
+}
