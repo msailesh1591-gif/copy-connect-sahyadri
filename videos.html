@@ -1,0 +1,34 @@
+---
+layout: page
+title: Videos
+subtitle: Click on the thumbnail to watch
+permalink: /videos/
+---
+
+{% assign video_data = "L7L1AwPMMYw|Tabla Assembly by Tabla Students, 15th September 2026;LSBhpv2WE34|Sitar Assembly by Class 12, 5th September 2026;ppRptHZVA2U|Bharatnatyam Performance by Class 11, 4th September 2026;jWBnSpEGw2k|Vocal Assembly, 29th August 2026;FgTxL3Tv26U|Onam Assembly, 25th August 2026;BLFC7kR9ssQ|Tholapavakoothu Performance, 20th August 2026;c1lNfJ3Bcl8|Class 11 Play, TODO: Add date;5f1D7itRH0Q|Class 11 Play, 25th July 2026;u0xvy8fAF68|Assembly by Shirali Sir, 5th March 2026;B_DAFuXGtTU|Marathi Play by Class 6, 29th January 2026;wDh2AIq0-hM|Lezim, 26th January 2026;SpNSMveVNds|Sitar Performance by Class 10, 24th January 2026;eU4VrkcdSvs|Bharatnatyam Performance, 24th January 2026;Obl5Lb9q7XQ|Makar Sankranti Assembly by Class 7, 14th January 2026;CnecjkzddkQ|Sitar Performance by Class 9, 9th January 2026;mHJ_fxARq4M|Marathi Play by Class 4, 2nd January 2026;__tZje9ac2s|Music Assembly, 29th December 2025;yrDStgogQXU|Assembly by Vocal Student, 6th December 2025;i1QVFCgJXNs|Class 10 Play \"O Captain, My Captain\", 30th August 2025;cn3509apTVI|Sitar Performance by Class 12, 23rd August 2025;usXoO01skhs|Performing Art - Tabla, 21st August 2025;ygj32W4sj2E|Bharatanatyam and Kathak Dance Performance, 13th August 2025;HD3EPAhiQV0|Cultural Event - Jaltarang by Pt Milind, 9th August 2025;2a8wG0gDRV8|Marathi Music Assembly by Classes 5 & 6, 5th August 2025;AY7zaDn7RCo|Class 11 Play, 26th July 2025;2ZmZCpq9y0M|Freshers Eve, 12th July 2025;6rLuDnX8FDA|Miya Tansen, 28th June 2025;xgelWzEUYPA|Assembly, 21st March 2025;-bvpjpW-FOo|Hindi Play, 15th March 2025" | split: ";" %}
+
+<div class="videos-page-container">
+  <div class="videos-page-grid">
+    {% for item in video_data %}
+      {% assign parts = item | split: "|" %}
+      <figure class="videos-page-item">
+        <div class="videos-page-wrapper" onclick="loadVideo(this)" data-video="{{ parts[0] }}">
+          <img src="https://img.youtube.com/vi/{{ parts[0] }}/hqdefault.jpg" alt="{{ parts[1] | escape }}" loading="lazy">
+        </div>
+        <figcaption>{{ parts[1] }}</figcaption>
+      </figure>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+function loadVideo(container) {
+  const videoId = container.getAttribute('data-video');
+  const iframe = document.createElement('iframe');
+  iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+  iframe.frameBorder = '0';
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  iframe.allowFullscreen = true;
+  container.replaceChildren(iframe);
+}
+</script>
