@@ -1,17 +1,38 @@
 ---
+# FILE: _layouts/default.html
+# PURPOSE: Generic content wrapper extending 'base'. Adds responsive container
+# and optional before-content/after-content include blocks.
+# ==============================================================================
+# PAGE CONTENT LAYOUT TEMPLATE
+# ==============================================================================
+# Extends the 'base' layout (which handles overall site head/footer/scripts).
+# This file structures the main content region of the page, including optional 
+# pre-content and post-content inclusions.
+
 layout: base
 ---
+
 <div class="intro-header"></div>
+
 <main class="{% if page.full-width %}container-fluid{% else %}container-md{% endif %}">
+
   {% if page.before-content %}
     <div class="before-content">
-      {% for file in page.before-content %}{% include {{ file }} %}{% endfor %}
+      {% for file in page.before-content %}
+        {% include {{ file }} %}
+      {% endfor %}
     </div>
   {% endif %}
+
+  
   {{ content }}
+
   {% if page.after-content %}
     <div class="after-content">
-      {% for file in page.after-content %}{% include {{ file }} %}{% endfor %}
+      {% for file in page.after-content %}
+        {% include {{ file }} %}
+      {% endfor %}
     </div>
   {% endif %}
+
 </main>
