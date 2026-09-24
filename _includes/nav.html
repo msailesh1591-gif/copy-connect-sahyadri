@@ -1,0 +1,143 @@
+<!-- FILE: _includes/nav.html — Main navigation bar: brand, menu items, dropdowns, search trigger, and dark mode toggle. -->
+<!-- 
+  FILE: _includes/nav.html
+  PURPOSE: Main navigation bar included in all pages
+  
+  STRUCTURE:
+  - Navbar brand (site title) with logo link
+  - Responsive navigation menu
+  - Dropdown menus for multi-level navigation
+  
+  KEY ELEMENTS:
+  - .navbar-custom - Custom navbar styling
+  - .navbar-brand - Site title/logo
+  - .navbar-nav - Navigation menu items
+  - .dropdown - Submenu items (e.g., RESOURCES, INFORMATION dropdowns)
+  
+  STYLING:
+  - Custom font: Poiret One for nav items, Amatic SC for brand
+  - Custom colors from _config.yml (navbar-text-col, navbar-bg-col)
+  - Flex layout for horizontal menu items (no wrap)
+  
+  JAVASCRIPT:
+  - Bootstrap dropdown functionality for mobile/desktop menu toggle
+  - Custom hover effects for desktop dropdowns (defined in custom-styles.css)
+  
+  NAVIGATION LINKS:
+  - ACTIVITIES: /activities/
+  - KRISHNAMURTI: /krishnamurti/
+  - NEWSLETTER: /posts/
+  - PROFILES: /profiles/
+  - RESOURCES: (dropdown menu)
+  - INFORMATION: (dropdown menu)
+  
+  MAINTAINED BY: Sahyadri Archives Team
+  LAST UPDATED: 2026
+-->
+
+<nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom {% if page.nav-short %}top-nav-short-permanent{% else %}top-nav-regular{% endif %}">
+  
+  <!-- Site Brand Link: Prefers logo image if configured, otherwise falls back to text title -->
+  {%- if site.title-img -%}
+  <a class="navbar-brand navbar-brand-logo" href="{{ '/' | absolute_url }}">
+    <img alt="{{ site.title }} Logo" src="{{ site.title-img | relative_url }}">
+  </a>
+  {%- elsif site.title -%}
+  <a class="navbar-brand" href="{{ '/' | absolute_url }}">{{ site.title }}</a>
+  {%- endif -%}
+
+  <!-- Mobile Hamburger Menu Toggle Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navigation Content Container -->
+  <div class="collapse navbar-collapse" id="main-navbar">
+    <ul class="navbar-nav ml-auto">
+      
+      <!-- Dynamic Navigation Link Generation from site.navbar-links -->
+      {%- for link in site.navbar-links -%}
+        {%- if link[1].first %}
+          <!-- Dropdown Menu Item for nested links -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{ link[0] }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              {%- for childlink in link[1] -%}
+                {%- for linkparts in childlink -%}
+                <a class="dropdown-item" href="{{ linkparts[1] | relative_url }}">{{ linkparts[0] }}</a>
+                {%- endfor -%}
+              {%- endfor %}
+            </div>
+          </li>
+        {%- else %}
+          <!-- Single Top-Level Navigation Link -->
+          <li class="nav-item">
+            <a class="nav-link" href="{{ link[1] | relative_url }}">{{ link[0] }}</a>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <!-- Dark Mode Toggle Button -->
+      <li class="nav-item d-flex align-items-center">
+        <button class="dark-mode-toggle" id="dark-mode-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+          <i class="fas fa-moon" id="dark-mode-icon"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Custom Site Navbar Extension Includes -->
+  {% if site.navbar-extra -%}
+    {% for file in site.navbar-extra -%}
+      {% include {{ file }} %}
+    {% endfor %}
+  {% endif %}
+
+  <!-- Profile / Site Avatar Display -->
+  {% if site.avatar and page.show-avatar != false -%}
+  <div class="avatar-container">
+    <div class="avatar-img-border">
+      <a href="{{ '/' | absolute_url }}">
+        <img alt="Navigation bar avatar" class="avatar-img" src="{{ site.avatar | relative_url }}">
+      </a>
+    </div>
+  </div>
+  {% endif %}
+</nav>
+
+<!-- Dark Mode Toggle Logic — persists across pages via localStorage.
+     Restoration on page load happens earlier in head.html (before render, on <html>);
+     this script only wires up the click handler and syncs the icon on load. -->
+<script>
+  (function() {
+    var STORAGE_KEY = 'sahyadri-dark-mode';
+
+    function setIcon(isDark) {
+      var icon = document.getElementById('dark-mode-icon');
+      if (icon) {
+        icon.classList.toggle('fa-sun', isDark);
+        icon.classList.toggle('fa-moon', !isDark);
+      }
+    }
+
+    // Sync icon with whatever head.html already applied to <html>
+    setIcon(document.documentElement.classList.contains('dark-mode'));
+
+    var toggleBtn = document.getElementById('dark-mode-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function() {
+        var isDark = !document.documentElement.classList.contains('dark-mode');
+        document.documentElement.classList.toggle('dark-mode', isDark);
+        setIcon(isDark);
+        try {
+          localStorage.setItem(STORAGE_KEY, isDark);
+        } catch (e) {
+          // localStorage unavailable — dark mode will still work for this page view
+        }
+      });
+    }
+  })();
+</script>
+
