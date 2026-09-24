@@ -1,0 +1,32 @@
+---
+# FILE: profiles-directory.html
+# PURPOSE: Fallback page shown when an author byline links to a profile that
+doesn't exist yet. post.html, posts.md, and activities.md all check
+# site.profiles at build time and route here (permalink /not_done_yet)
+# instead of generating a link that would 404.
+# Jekyll Front Matter Configuration
+layout: default
+title: Profile not made yet
+permalink: /not_done_yet
+---
+
+<!-- Top Back Navigation Container -->
+<div class="back-navigation mb-4">
+  <!-- 
+    Dynamic Back Button:
+    Attempts to trigger browser history navigation (window.history.back()) if a referrer exists.
+    Falls back to the hardcoded href ("/profiles") if the user accessed the URL directly.
+  -->
+  <a href="/profiles" id="back-button" onclick="if(document.referrer !== '') { window.history.back(); return false; }">
+    <i class="fas fa-chevron-left"></i> 
+    Back
+  </a>
+</div>
+
+<!-- Main Heading Message -->
+<h1 class="text-center">Profile has not been made yet.</h1>
+
+<!-- Vertical Spacing -->
+<br/>
+<br/>
+<br/>
