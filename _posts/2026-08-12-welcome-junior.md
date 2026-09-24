@@ -15,3 +15,4 @@ In later days we gathered in the Hawa Mahal for talks. These discussions had som
 Even in our respective subject classes we spoke about what all different activities, projects, experiments we are going to do in the coming year.
 
 One thing, I feel, everyone will agree to is that this year’s orientation was the one to remember!
+
