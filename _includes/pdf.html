@@ -1,0 +1,8 @@
+<!-- FILE: _includes/pdf.html — Embeds a PDF viewer for a given file. -->
+<div class="pdf-container">
+  <div class="pdf-thumbnail">
+    <a href="{{ include.pdf_path | relative_url }}" target="_blank" download>
+      <img src="{{ include.thumbnail_path | relative_url }}" alt="Download PDF">
+    </a>
+  </div>
+</div>
