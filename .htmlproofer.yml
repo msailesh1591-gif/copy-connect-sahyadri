@@ -1,0 +1,15 @@
+disable_external: true
+allow_hash_href: true
+ignore_urls:
+  - /^#/
+  - /^mailto:/
+  - /^tel:/
+  - /\/profiles\//
+  - /\/tags/
+ignore_files:
+  - "./_site/feed.xml"
+  - "./_site/photos/index.html"
+  - "./_site/profiles/index.html"
+checks:
+  - Links
+  - Scripts
