@@ -7,8 +7,8 @@
 # -----------------------------------------------------------------------------
 # Site Identity
 # -----------------------------------------------------------------------------
-url: "https://connect.sahyadrischool.org"
-baseurl: ""
+url: "https://msailesh1591-gif.github.io"
+baseurl: "/copy-connect-sahyadri"
 title: "Sahyadri Connect"
 author: "Sahyadri"
 title-on-all-pages: true   # Appends site title to every page's <title> tag
