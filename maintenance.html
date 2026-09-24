@@ -3,11 +3,28 @@ layout: null
 title: "Site Maintenance"
 permalink: /maintenance/
 ---
-<!-- FILE: maintenance.html — Standalone maintenance-mode landing page. -->
+<!-- FILE: maintenance.html — Standalone maintenance-mode landing page.
+     PURPOSE: Shown to every visitor when site.maintenance-mode is true
+     in _config.yml (see the "Maintenance Mode" section near the top of
+     that file). layout: null since this is a self-contained document
+     with its own <head>/<style>, since it does NOT go through base.html, so
+     it has no nav/footer chrome and loads its own fonts independently
+     (see the font <link> below).
+     Also doubles as a reverse-redirect target: if maintenance mode is
+     OFF but someone still lands here (an old bookmark, a shared link,
+     search engine cache), the script right below sends them home
+     instead of showing this stale page.
+     approve.html intentionally bypasses this page's redirect entirely,
+     so a moderator can still approve/reject comments while the rest of
+     the site is down for maintenance. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   {%- unless site.maintenance-mode -%}
+  <!-- Reverse redirect: if maintenance mode is OFF but someone still lands on
+       /maintenance/ (e.g. an old bookmark, a shared link, or a search engine
+       result), send them straight to the homepage instead of showing a stale
+       "under maintenance" page. -->
   <script>
     window.location.replace("{{ '/' | relative_url }}");
   </script>
@@ -17,7 +34,7 @@ permalink: /maintenance/
   <title>Under Maintenance | Sahyadri Connect</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Poiret+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&amp;family=Poiret+One&amp;display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
@@ -35,7 +52,10 @@ permalink: /maintenance/
       text-align: center;
       padding: 40px 20px;
     }
-    .maintenance-icon { font-size: 4rem; margin-bottom: 20px; }
+    .maintenance-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
     h1 {
       font-family: 'Amatic SC', cursive, sans-serif;
       font-weight: bold;
@@ -57,8 +77,15 @@ permalink: /maintenance/
       font-size: 1.8rem;
       color: #5f745f;
     }
-    .contact-line { margin-top: 30px; font-size: 0.95rem; color: #777; }
-    .contact-line a { color: #5f745f; text-decoration: underline; }
+    .contact-line {
+      margin-top: 30px;
+      font-size: 0.95rem;
+      color: #777;
+    }
+    .contact-line a {
+      color: #5f745f;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>

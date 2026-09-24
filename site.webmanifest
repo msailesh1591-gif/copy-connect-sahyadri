@@ -1,0 +1,29 @@
+---
+---
+{
+  "//": "==========================================================================",
+  "//": "WEB APP MANIFEST TEMPLATE (manifest.json)",
+  "//": "Provides metadata to allow the web app to be installed on modern mobile/desktop",
+  "//": "==========================================================================",
+
+  "//": "Full name of the web application used on application splash screens & launcher prompts",
+  "name": "{{ site.title }}",
+
+  "//": "Short application name displayed on home screens or limited space UI elements",
+  "short_name": "{{ site.title }}",
+
+  "//": "List of app icons across various resolutions for device home screens and OS tasks",
+  "icons": [
+    {
+      "//": "Fallback default favicon icon target",
+      "src": "/favicon.ico"
+    },
+    {
+      "//": "Second icon entry -- previously pointed at a 512x512 PNG that was never actually added to assets/img/, which left this broken. Pointing at favicon.ico too until a real high-res icon exists.",
+      "src": "/favicon.ico"
+    }
+  ],
+
+  "//": "Defines the preferred UI display mode ('standalone' hides standard browser UI/URL bar)",
+  "display": "standalone"
+}
