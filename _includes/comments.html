@@ -1,0 +1,11 @@
+<!-- FILE: _includes/comments.html — Renders the configured comment system. -->
+{% if page.comments %}
+  {% assign provider = site.comments-provider | default: "elfsight" %}
+  {% if provider == "firebase" %}
+    {% include firebase-comments.html %}
+  {% else %}
+    {% if site.elfsight-app-id %}
+      {% include elfsight-comments.html %}
+    {% endif %}
+  {% endif %}
+{% endif %}
