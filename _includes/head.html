@@ -1,0 +1,232 @@
+<!-- FILE: _includes/head.html — Builds the full <head> tag: meta tags, Open Graph/Twitter cards, favicons, stylesheets, and JSON-LD. -->
+<head>
+  {%- if site.maintenance-mode and page.url != "/maintenance/" -%}
+  <!-- Maintenance Mode Redirect — fires before any content renders if site.maintenance-mode is true in _config.yml.
+       Skips the redirect if a valid ?bypass= key is present in the URL or was previously
+       remembered for this browser tab session (see maintenance-bypass-key in _config.yml). -->
+  <script>
+    (function() {
+      var BYPASS_STORAGE_KEY = 'sahyadri-maintenance-bypass';
+      var VALID_KEY = "{{ site.maintenance-bypass-key | default: '' }}";
+      var params = new URLSearchParams(window.location.search);
+      var suppliedKey = params.get('bypass');
+
+      if (VALID_KEY && suppliedKey === VALID_KEY) {
+        try { sessionStorage.setItem(BYPASS_STORAGE_KEY, 'true'); } catch (e) {}
+      }
+
+      var hasBypass = false;
+      try { hasBypass = sessionStorage.getItem(BYPASS_STORAGE_KEY) === 'true'; } catch (e) {}
+
+      if (!hasBypass) {
+        window.location.replace("{{ '/maintenance/' | relative_url }}");
+      }
+    })();
+  </script>
+  {%- endif -%}
+
+  <!-- Dark Mode Early Restore — runs before any CSS/content renders to prevent flash -->
+  <script>
+    (function() {
+      try {
+        if (localStorage.getItem('sahyadri-dark-mode') === 'true') {
+          document.documentElement.classList.add('dark-mode');
+        }
+      } catch (e) {
+        // localStorage unavailable (private browsing, blocked storage, etc.) — fail silently
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts Preconnecting & Stylesheet Loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&amp;family=Poiret+One&amp;family=Vibes&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <!-- Character Encoding & Responsive Viewport Settings -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Dynamic Page Title Logic -->
+  {% capture pagetitle -%}
+    {%- if page.share-title -%}
+      {{ page.share-title | strip_html | xml_escape }}
+    {%- elsif page.title -%}
+      {{ page.title | strip_html | xml_escape }}
+    {%- else -%}
+      {{ site.title | strip_html | xml_escape }}
+    {%- endif -%}
+  {%- endcapture %}
+
+  {% capture title -%}
+    {%- if site.title and site.title-on-all-pages and (site.title != pagetitle) -%}
+      {{ pagetitle }} | {{ site.title }}
+    {%- else -%}
+      {{ pagetitle }}
+    {%- endif -%}
+  {%- endcapture %}
+
+  <!-- Dynamic Page Description Logic (Fallback to Truncated Content Excerpt) -->
+  {% capture description -%}
+    {%- if page.share-description -%}
+      {{ page.share-description | strip_html | xml_escape }}
+    {%- elsif page.subtitle -%}
+      {{ page.subtitle | strip_html | xml_escape }}
+    {%- else -%}
+      {%- assign excerpt_length = site.excerpt_length | default: 50 -%}
+      {{ page.content | strip_html | xml_escape | truncatewords: excerpt_length | strip }}
+    {%- endif -%}
+  {%- endcapture %}
+
+  <title>{{ title }}</title>
+
+  <!-- Author Meta Tag -->
+  {% capture author -%}
+    {%- if page.author -%}
+      {{ page.author | strip_html }}
+    {%- elsif site.author -%}
+      {{ site.author }}
+    {%- endif -%}
+  {%- endcapture %}
+
+  {% if author != "" -%}
+  <meta name="author" content="{{ author }}">
+  {% endif %}
+
+  <meta name="description" content="{{ description }}">
+
+  <!-- Mobile Browser Theme Color -->
+  {% if site.mobile-theme-col -%}
+  <meta name="theme-color" content="{{ site.mobile-theme-col }}">
+  {% endif %}
+
+  <!-- SEO Keywords -->
+  {% if site.keywords -%}
+  <meta name="keywords" content="{{ site.keywords }}">
+  {% endif %}
+
+  <!-- RSS Feed Link -->
+  {% if site.rss-description -%}
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | absolute_url }}">
+  {% endif %}
+
+  <!-- Analytics, Tracking, and Script Includes -->
+  {% include gtag.html %}
+  {% include gtm_head.html %}
+  {% include google_analytics.html %}
+  {% include cloudflare_analytics.html %}
+  {% include matomo.html %}
+
+  <!-- MathJax Equations Support -->
+  {% include mathjax.html %}
+
+  <!-- Tiered CSS Includes: External Layout, Internal Layout, Site-wide, External Page, Internal Page -->
+  {% if layout.common-ext-css -%}
+    {% for css in layout.common-ext-css -%}
+      {% include ext-css.html css=css %}
+    {% endfor %}
+  {% endif %}
+
+  {% if layout.common-css -%}
+    {% for css in layout.common-css -%}
+      <link rel="stylesheet" href="{{ css | relative_url }}">
+    {% endfor %}
+  {% endif %}
+
+  {% if site.site-css -%}
+    {% for css in site.site-css -%}
+      <link rel="stylesheet" href="{{ css | relative_url }}">
+    {% endfor %}
+  {% endif %}
+
+  {% if page.ext-css -%}
+    {% for css in page.ext-css -%}
+      {% include ext-css.html css=css %}
+    {% endfor %}
+  {% endif %}
+
+  {% if page.css -%}
+    {% for css in page.css -%}
+      <link rel="stylesheet" href="{{ css | relative_url }}">
+    {% endfor %}
+  {% endif %}
+
+  <!-- Facebook Open Graph App ID & Site Name -->
+  {% if site.fb_app_id -%}
+  <meta property="fb:app_id" content="{{ site.fb_app_id }}">
+  {% endif %}
+
+  {% if site.title -%}
+  <meta property="og:site_name" content="{{ site.title }}">
+  {% endif %}
+
+  <!-- Open Graph Image Resolution Hierarchy -->
+  {%- capture img -%}
+    {%- if page.share-img -%}
+      {{ page.share-img }}
+    {%- elsif page.image -%}
+      https://lh3.googleusercontent.com/d/{{ page.image }}?sz=9999
+    {%- elsif page.cover-img -%}
+      {%- if page.cover-img.first -%}
+        {{ page.cover-img[0].first.first }}
+      {%- else -%}
+        {{ page.cover-img }}
+      {%- endif -%}
+    {%- elsif page.thumbnail-img -%}
+      {{ page.thumbnail-img }}
+    {%- elsif site.avatar -%}
+      {{ site.avatar }}
+    {%- endif -%}
+  {%- endcapture -%}
+  {%- assign img = img | strip -%}
+
+  <!-- Open Graph Shared Properties -->
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+
+  {% if img != "" -%}
+  <meta property="og:image" content="{{ img | absolute_url }}">
+  {% endif %}
+
+  <!-- Canonical Links & Contextual Open Graph Types (Article vs. Website) -->
+  {% if page.id -%}
+  <meta property="og:type" content="article">
+  {% if author != "" -%}
+  <meta property="og:article:author" content="{{ author }}">
+  {% endif %}
+  <meta property="og:article:published_time" content="{{ page.date | date_to_xmlschema }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  {% else -%}
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page.url | absolute_url | strip_index }}">
+  <link rel="canonical" href="{{ page.url | absolute_url | strip_index }}">
+  {% endif %}
+
+  <!-- Twitter Card Customization -->
+  {% if img != "" and img != site.avatar -%}
+  <meta name="twitter:card" content="summary_large_image">
+  {% else -%}
+  <meta name="twitter:card" content="summary">
+  {% endif %}
+  <meta name="twitter:site" content="@{{ site.social-network-links.twitter }}">
+  <meta name="twitter:creator" content="@{{ site.social-network-links.twitter }}">
+
+  <meta property="twitter:title" content="{{ title }}">
+  <meta property="twitter:description" content="{{ description }}">
+
+  {% if img != "" -%}
+  <meta name="twitter:image" content="{{ img | absolute_url }}">
+  {% endif %}
+
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/png" href="{{ '/assets/img/favicon.png' | relative_url }}">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ '/assets/img/favicon.ico' | relative_url }}">
+
+  <!-- Custom Page-Specific Head Extensions -->
+  {% if page.head-extra -%}
+    {% for file in page.head-extra -%}
+      {% include {{ file }} %}
+    {% endfor %}
+  {% endif %}
+</head>
