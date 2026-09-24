@@ -1,0 +1,282 @@
+# =============================================================================
+# Sahyadri Connect — Jekyll Configuration
+# Site: https://connect.sahyadrischool.org
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# Site Identity
+# -----------------------------------------------------------------------------
+url: "https://connect.sahyadrischool.org"
+baseurl: ""
+title: "Sahyadri Connect"
+author: "Sahyadri"
+title-on-all-pages: true   # Appends site title to every page's <title> tag
+description: "A window into life at Sahyadri School — newsletters, activities, and reflections from students, teachers, and the wider Krishnamurti Foundation India community."
+
+# -----------------------------------------------------------------------------
+# Maintenance Mode
+# When true, every page on the site immediately redirects to /maintenance/
+# (see maintenance.html at the repo root). Set back to false to restore
+# normal site access.
+#
+# To preview the live site while maintenance mode is on, visit:
+#   https://connect.sahyadrischool.org/?bypass=<maintenance-bypass-key below>
+# Visiting that link once unlocks normal browsing for the rest of that
+# browser tab's session (uses sessionStorage -- closes when the tab closes).
+# Change the key below any time to invalidate old bypass links.
+# NOTE: this repo is public, so this key is not a real secret -- it only
+# prevents casual visitors from stumbling onto the bypass, not a
+# determined person reading the source.
+# -----------------------------------------------------------------------------
+maintenance-mode: true
+maintenance-bypass-key: "sahyadri-preview-2026"
+
+# -----------------------------------------------------------------------------
+# Navigation Bar
+# -----------------------------------------------------------------------------
+navbar-links:
+  Activities: "activities"
+  Krishnamurti: "kfi"
+  Newsletter: "posts"
+  Profiles: "profiles"
+  Resources:
+    - Photos: "photos"
+    - Videos: "videos"
+    - Ninad: "ninad"
+    - Geet Gunjan: "geeth"
+  Information:
+    - Communication: "comms"
+
+
+# -----------------------------------------------------------------------------
+# Logo & Branding
+# Uncomment whichever option you want to use (only one at a time).
+# -----------------------------------------------------------------------------
+
+# Square image shown in the navigation bar
+# avatar: "/assets/img/avatar-icon.png"
+
+# Crop avatar into a circle
+# round-avatar: true
+
+# Replace the text title with an image logo in the top-left corner
+# title-img: /path/to/image
+
+
+# -----------------------------------------------------------------------------
+# Feed & Post Settings
+# -----------------------------------------------------------------------------
+
+# Provide a value to enable the RSS feed at /feed.xml
+rss-description:
+
+excerpt_length: 50       # Number of words shown in post excerpts
+feed_show_excerpt: true  # Show excerpts in the RSS feed
+feed_show_tags: true     # Include tags in the RSS feed
+
+
+# -----------------------------------------------------------------------------
+# UI Behaviour
+# -----------------------------------------------------------------------------
+post_search: true           # Enables the year-scoped search box on posts.md/activities.md ONLY (not a sitewide navbar search — see custom-styles.css section 27)
+edit_page_button: true      # Show "Edit this page" button on posts
+
+# Allow sub-menu items to be wider than top-level items.
+# Set to true if long submenu words are being clipped.
+navbar-var-length: false
+
+
+# -----------------------------------------------------------------------------
+# Color Scheme
+# -----------------------------------------------------------------------------
+
+# Page
+page-col: "#FFFFFF"
+text-col: "#3E3830"
+
+# Links
+# link-col darkened from #A67C52 (3.73:1 on white, fails WCAG AA's 4.5:1
+# for normal text) to meet contrast while staying the same tan/brown hue.
+link-col: "#916c47"
+hover-col: "#8FA186"
+
+# Navigation bar
+# navbar-col darkened from #668571 (2.82:1 against its own nav-link text,
+# fails WCAG AA) -- this single change also fixes navbar-brand (the site
+# title) and nav-link:hover, both of which use colors set directly in
+# custom-styles.css rather than the vars below.
+navbar-col: "#587362"
+navbar-hover-col: "#8FA186"
+# navbar-text-col lightened from #D0DAC8 (3.60:1 against the new darker
+# navbar-col, still fails) -- used directly by dropdown menu items
+# (Resources/Information), which don't have their own color override
+# the way regular nav-links do.
+navbar-text-col: "#eff2ec"
+navbar-border-col: "#BBC4B4"
+
+# Footer
+footer-col: "#B2C2AD"
+footer-text-col: "#3E3830"
+# footer-link-col/footer-hover-col darkened from #A67C52 (1.99:1) and
+# #668571 (2.17:1) against the footer background -- both badly failed
+# WCAG AA, footer links were genuinely hard to read.
+footer-link-col: "#614830"
+footer-hover-col: "#3e5144"
+
+
+# -----------------------------------------------------------------------------
+# Background Images (alternative to solid colors above)
+# Uncomment any of these to use an image instead of the color setting.
+# -----------------------------------------------------------------------------
+# navbar-img: "/assets/img/bgimage.png"
+# footer-img: "/assets/img/bgimage.png"
+# page-img: "/assets/img/bgimage.png"
+
+
+# -----------------------------------------------------------------------------
+# Custom CSS
+# -----------------------------------------------------------------------------
+site-css:
+  - "/assets/css/custom-styles.css"
+
+
+# -----------------------------------------------------------------------------
+# Date Format
+# -----------------------------------------------------------------------------
+date_format: "%B %-d, %Y"   # Example: July 25, 2026
+
+
+# -----------------------------------------------------------------------------
+# Markdown Parser
+# -----------------------------------------------------------------------------
+kramdown:
+  input: GFM   # GitHub Flavored Markdown
+
+
+# -----------------------------------------------------------------------------
+# Comments — provider selection
+# "elfsight" (default) or "firebase". See _includes/comments.html.
+# -----------------------------------------------------------------------------
+comments-provider: "firebase"
+
+# -----------------------------------------------------------------------------
+# Comments (Elfsight Comments widget)
+# App ID extracted from the embed class "elfsight-app-<ID>" in your
+# Elfsight dashboard. This value is referenced via {{ site.elfsight-app-id }}
+# Leave blank or remove to disable the comment widget sitewide.
+# -----------------------------------------------------------------------------
+elfsight-app-id: "2959381d-e116-43d1-ae7c-2499b54d5bec"
+
+# -----------------------------------------------------------------------------
+# Comments (Firebase comments widget — alternative to Elfsight)
+# Google sign-in + Firestore, scoped per page URL. Only used when
+# comments-provider above is set to "firebase". Get these values from the
+# Firebase console: Project settings -> your web app -> SDK setup and
+# configuration. Requires the Firestore security rules from your setup
+# session to be published in the Firebase console (not something this repo
+# or this file can do) — do not leave Firestore in open "test mode" on a
+# real deployment, since students will be signing in with Google here.
+# -----------------------------------------------------------------------------
+firebase-api-key: "AIzaSyCJgBxE0_X7jwB5YSRfllwhT4loQcVkHNw"
+firebase-auth-domain: "comments-for-connect.firebaseapp.com"
+firebase-project-id: "comments-for-connect"
+firebase-storage-bucket: "comments-for-connect.firebasestorage.app"
+firebase-messaging-sender-id: "339085223290"
+firebase-app-id: "1:339085223290:web:3b3fb009e2a6796ca522c3"
+
+# -----------------------------------------------------------------------------
+# Comments moderation notifications (optional)
+# When a new comment is posted, it's saved with approved:false and hidden
+# from everyone but its author until a moderator approves it (in the
+# Firestore console). If the four values below are all set, an email is
+# also sent via EmailJS to comments-moderator-email with a link to
+# approve it. Leave any of them blank to skip the email -- comments still
+# queue for approval either way, you'd just need to check Firestore
+# manually instead of getting notified.
+# NOTE: these values (including the moderator email) end up in the
+# public JS shipped to every visitor's browser, same as firebase-api-key
+# above -- this is normal for a client-side EmailJS public key, but bear
+# it in mind for the moderator email address specifically.
+# -----------------------------------------------------------------------------
+emailjs-service-id: "service_bm8k6oi"
+emailjs-template-id: "template_4ajielr"
+emailjs-public-key: "_m8oNTLJbEdd0W7kc"
+comments-moderator-email: "archives@sahyadrischool.org"
+
+
+# -----------------------------------------------------------------------------
+# Default Layouts & Front Matter
+# -----------------------------------------------------------------------------
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      comments: true
+
+  - scope:
+      path: ""
+      type: "activities"
+    values:
+      layout: "post"
+      comments: true
+
+  - scope:
+      path: ""
+      type: "profiles"
+    values:
+      layout: "profile"
+      comments: true
+
+  - scope:
+      path: ""          # Catch-all for pages not matched above
+    values:
+      layout: "page"
+
+
+# -----------------------------------------------------------------------------
+# Files Excluded from Production Build
+# -----------------------------------------------------------------------------
+exclude:
+  - CHANGELOG.md
+  - CONTENT-GUIDE.md
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+  - screenshot.png
+  - docs/
+  - vendor/
+  - node_modules/
+  - .github/
+
+
+# -----------------------------------------------------------------------------
+# Plugins
+# -----------------------------------------------------------------------------
+plugins:
+  - jekyll-sitemap
+
+
+# -----------------------------------------------------------------------------
+# Collections
+# -----------------------------------------------------------------------------
+collections:
+  posts:
+    output: true
+    permalink: /posts/:title
+
+  activities:
+    output: true
+    permalink: /activities/:title/
+
+  profiles:
+    output: true
+    permalink: /profiles/:title/
+
+# Rebuilt: 2026-08-20T09:48:06.035326
+
+# Favicon
+favicon: /favicon.ico
