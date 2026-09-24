@@ -1,0 +1,543 @@
+<!-- FILE: _includes/firebase-comments.html — Firebase-backed comments widget
+     (Google sign-in, threaded replies, edit/delete, likes, emoji reactions,
+     sorting, and a moderation-approval queue — all synced live via
+     Firestore). page.comments is already checked by the parent
+     comments.html include. Requires firebase-project-id (and the other
+     firebase-* config keys below) to be set in _config.yml, or this
+     include renders nothing. Styling lives in assets/css/custom-styles.css
+     (section 35), matching the site's actual theme colors/fonts and
+     dark-mode conventions.
+     Moderation email notifications (comments-moderator-email /
+     emailjs-*) are optional, if unset, new comments are still queued
+     with approved:false but no notification email is sent; you'd need
+     to approve them manually in the Firestore console (or via
+     approve.html once you have a comment id).
+     Visible comments come from two separate queries rather than one
+     query filtered client-side: a public query (approved:true) and, for
+     the signed-in viewer, a second query for just their own pending
+     comments. This matches what a Firestore security rule can actually
+     validate for a list query: a rule based on request.auth.uid ==
+     resource.data.uid (own-pending) or resource.data.approved == true
+     (public) is provably safe, unlike trusting the client to hide
+     unapproved comments from other viewers after a single broad read. -->
+{% if site.firebase-api-key and site.firebase-project-id %}
+
+<div id="comments-section">
+  <div class="sc-heading-row">
+    <h3>Comments<span id="comments-count" class="sc-count"></span></h3>
+    <select id="comments-sort" class="sc-sort-select">
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+      <option value="top">Most liked</option>
+    </select>
+  </div>
+
+  <div id="comments-auth">
+    <button id="comments-login-btn" class="sc-btn">Sign in with Google to comment</button>
+    <span id="comments-user-info" style="display:none;">
+      Signed in as <strong id="comments-user-name"></strong>
+      <button id="comments-logout-btn" class="sc-btn sc-btn-ghost">Sign out</button>
+    </span>
+  </div>
+
+  <div id="comments-form" style="display:none;">
+    <textarea id="comments-textarea" class="sc-textarea" maxlength="2000" placeholder="Add a comment..."></textarea>
+    <span id="comments-char-count" class="sc-char-count">0 / 2000</span>
+    <button id="comments-submit-btn" class="sc-btn">Post comment</button>
+  </div>
+
+  <div id="comments-feed">
+    <p id="comments-loading">Loading comments…</p>
+  </div>
+</div>
+
+<!-- Firebase SDKs via CDN (v10 modular, loaded as ES modules — no build tools needed) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import {
+    getFirestore,
+    collection,
+    doc,
+    addDoc,
+    updateDoc,
+    deleteField,
+    increment,
+    query,
+    where,
+    orderBy,
+    onSnapshot,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  // Pulled from _config.yml so the config lives in one place, same
+  // pattern as site.elfsight-app-id for the other comments provider.
+  const firebaseConfig = {
+    apiKey: "{{ site.firebase-api-key }}",
+    authDomain: "{{ site.firebase-auth-domain }}",
+    projectId: "{{ site.firebase-project-id }}",
+    storageBucket: "{{ site.firebase-storage-bucket }}",
+    messagingSenderId: "{{ site.firebase-messaging-sender-id }}",
+    appId: "{{ site.firebase-app-id }}"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  // Moderation email notification -- optional. If any of these are unset,
+  // notifyModerator() below is a no-op (comments still queue as
+  // approved:false either way; you'd just have to check the Firestore
+  // console or approve.html manually instead of getting an email).
+  const EMAILJS_SERVICE_ID = "{{ site.emailjs-service-id }}";
+  const EMAILJS_TEMPLATE_ID = "{{ site.emailjs-template-id }}";
+  const EMAILJS_PUBLIC_KEY = "{{ site.emailjs-public-key }}";
+  const MODERATOR_EMAIL = "{{ site.comments-moderator-email }}";
+  const MODERATION_EMAIL_ENABLED = !!(EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY && MODERATOR_EMAIL);
+
+  const pageUrl = window.location.origin + window.location.pathname;
+  const MAX_LENGTH = 2000;
+  const REACTION_EMOJIS = ["👍", "❤️", "😂", "😮", "😢"];
+
+  // --- DOM refs ---
+  const loginBtn = document.getElementById("comments-login-btn");
+  const logoutBtn = document.getElementById("comments-logout-btn");
+  const userInfo = document.getElementById("comments-user-info");
+  const userNameEl = document.getElementById("comments-user-name");
+  const formEl = document.getElementById("comments-form");
+  const textarea = document.getElementById("comments-textarea");
+  const charCountEl = document.getElementById("comments-char-count");
+  const submitBtn = document.getElementById("comments-submit-btn");
+  const feedEl = document.getElementById("comments-feed");
+  const loadingEl = document.getElementById("comments-loading");
+  const countEl = document.getElementById("comments-count");
+  const sortSelect = document.getElementById("comments-sort");
+
+  let currentUser = null;
+  let latestDocs = null; // merged cache used by rendering -- combination of the two sources below
+  let latestApprovedDocs = [];
+  let latestOwnPendingDocs = [];
+  let unsubscribeFeed = null;
+  let unsubscribeOwnPending = null;
+
+  // --- Auth: login / logout ---
+  loginBtn.addEventListener("click", () => {
+    signInWithPopup(auth, provider).catch((err) => {
+      console.error("Sign-in failed:", err);
+      alert("Sign-in failed. Please try again.");
+    });
+  });
+
+  logoutBtn.addEventListener("click", () => signOut(auth));
+
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    if (user) {
+      loginBtn.style.display = "none";
+      userInfo.style.display = "flex";
+      userNameEl.textContent = user.displayName || user.email;
+      formEl.style.display = "block";
+    } else {
+      loginBtn.style.display = "inline-block";
+      userInfo.style.display = "none";
+      formEl.style.display = "none";
+    }
+    renderFeed();
+    subscribeOwnPending();
+  });
+
+  // --- Character counter on the main compose box ---
+  textarea.addEventListener("input", () => updateCharCount(textarea, charCountEl));
+
+  function updateCharCount(el, countEl) {
+    const len = el.value.length;
+    countEl.textContent = `${len} / ${MAX_LENGTH}`;
+    countEl.classList.toggle("sc-near-limit", len > MAX_LENGTH * 0.9);
+  }
+
+  // --- Post a new top-level comment ---
+  submitBtn.addEventListener("click", async () => {
+    const text = textarea.value.trim();
+    if (!text || !currentUser) return;
+    submitBtn.disabled = true;
+    try {
+      await postComment(text, null);
+      textarea.value = "";
+      updateCharCount(textarea, charCountEl);
+    } catch (err) {
+      console.error("Failed to post comment:", err);
+      alert("Could not post comment. Please try again.");
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+
+  async function postComment(text, parentId) {
+    if (!currentUser) throw new Error("not signed in");
+    const docRef = await addDoc(collection(db, "comments"), {
+      text,
+      pageUrl,
+      uid: currentUser.uid,
+      name: currentUser.displayName || "Anonymous",
+      photoURL: currentUser.photoURL || null,
+      createdAt: serverTimestamp(),
+      editedAt: null,
+      deleted: false,
+      approved: false, // hidden from everyone but the author until a moderator approves it
+      parentId: parentId || null,
+      likes: {},
+      likeCount: 0,
+      reactions: {}
+    });
+
+    // Fire-and-forget: notify the moderator, if configured. A failure
+    // here should never block the comment itself.
+    if (MODERATION_EMAIL_ENABLED) {
+      notifyModerator({
+        docId: docRef.id,
+        authorName: currentUser.displayName || "Anonymous",
+        authorEmail: currentUser.email || "unknown",
+        text,
+        isReply: !!parentId
+      });
+    }
+  }
+
+  async function notifyModerator({ docId, authorName, authorEmail, text, isReply }) {
+    const consoleLink = `${window.location.origin}/approve.html?id=${docId}`;
+    try {
+      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: EMAILJS_SERVICE_ID,
+          template_id: EMAILJS_TEMPLATE_ID,
+          user_id: EMAILJS_PUBLIC_KEY,
+          template_params: {
+            to_email: MODERATOR_EMAIL,
+            comment_type: isReply ? "Reply" : "Comment",
+            author_name: authorName,
+            author_email: authorEmail,
+            comment_text: text,
+            page_url: pageUrl,
+            approve_link: consoleLink
+          }
+        })
+      });
+    } catch (err) {
+      console.error("Could not send moderation email (comment was still saved and is awaiting approval):", err);
+    }
+  }
+
+  // --- Sorting: rebuild the PUBLIC query (approved comments only) & re-subscribe ---
+  // "approved" is now part of the query itself, not just the security rule -- this is what
+  // makes the read rule provably safe for Firestore to evaluate on a list query.
+  function buildQuery(mode) {
+    let orderClause;
+    if (mode === "oldest") orderClause = orderBy("createdAt", "asc");
+    else if (mode === "top") orderClause = orderBy("likeCount", "desc");
+    else orderClause = orderBy("createdAt", "desc");
+    return query(
+      collection(db, "comments"),
+      where("pageUrl", "==", pageUrl),
+      where("approved", "==", true),
+      orderClause
+    );
+  }
+
+  function subscribeFeed(mode) {
+    if (unsubscribeFeed) unsubscribeFeed();
+    loadingEl.style.display = "block";
+    loadingEl.className = "";
+    loadingEl.textContent = "Loading comments…";
+    feedEl.prepend(loadingEl);
+
+    unsubscribeFeed = onSnapshot(
+      buildQuery(mode),
+      (snapshot) => {
+        loadingEl.style.display = "none";
+        latestApprovedDocs = snapshot.docs;
+        recomputeAndRender();
+      },
+      (err) => {
+        console.error("Failed to load comments:", err);
+        loadingEl.className = "sc-error";
+        loadingEl.style.display = "block";
+        loadingEl.textContent = "Could not load comments. Please try again later.";
+      }
+    );
+  }
+
+  // --- Separate query: just the signed-in viewer's own pending (not-yet-approved) comments ---
+  // Kept apart from the public query above for the same reason: a rule based purely on
+  // request.auth.uid == resource.data.uid (with no OR) is one Firestore can always validate.
+  function subscribeOwnPending() {
+    if (unsubscribeOwnPending) {
+      unsubscribeOwnPending();
+      unsubscribeOwnPending = null;
+    }
+    latestOwnPendingDocs = [];
+
+    if (!currentUser) {
+      recomputeAndRender();
+      return;
+    }
+
+    const q = query(
+      collection(db, "comments"),
+      where("pageUrl", "==", pageUrl),
+      where("uid", "==", currentUser.uid),
+      where("approved", "==", false)
+    );
+
+    unsubscribeOwnPending = onSnapshot(
+      q,
+      (snapshot) => {
+        latestOwnPendingDocs = snapshot.docs;
+        recomputeAndRender();
+      },
+      (err) => console.error("Failed to load your pending comments:", err)
+    );
+  }
+
+  function recomputeAndRender() {
+    const seen = new Set();
+    const merged = [];
+    for (const d of latestApprovedDocs) {
+      seen.add(d.id);
+      merged.push(d);
+    }
+    for (const d of latestOwnPendingDocs) {
+      if (!seen.has(d.id)) merged.push(d);
+    }
+    latestDocs = merged;
+    renderFeed();
+  }
+
+  sortSelect.addEventListener("change", (e) => subscribeFeed(e.target.value));
+  subscribeFeed("newest");
+
+  // --- Rendering ---
+  function renderFeed() {
+    if (!latestDocs) return;
+
+    const visibleCount = latestDocs.filter((d) => !d.data().deleted && d.data().approved).length;
+    countEl.textContent = visibleCount > 0 ? ` (${visibleCount})` : "";
+
+    const topLevel = latestDocs.filter((d) => !d.data().parentId);
+
+    if (topLevel.length === 0) {
+      feedEl.innerHTML = '<p class="sc-empty">No comments yet. Be the first to share your thoughts.</p>';
+      return;
+    }
+
+    feedEl.innerHTML = topLevel.map(renderThread).join("");
+  }
+
+  function renderThread(docSnap) {
+    const replies = latestDocs
+      .filter((d) => d.data().parentId === docSnap.id)
+      .sort((a, b) => (a.data().createdAt?.toMillis() || 0) - (b.data().createdAt?.toMillis() || 0));
+
+    return `
+      <div class="sc-comment-thread">
+        ${renderComment(docSnap, false)}
+        ${replies.length ? `<div class="sc-replies">${replies.map((r) => renderComment(r, true)).join("")}</div>` : ""}
+      </div>
+    `;
+  }
+
+  function renderComment(docSnap, isReply) {
+    const data = docSnap.data();
+    const id = docSnap.id;
+
+    if (data.deleted) {
+      return `
+        <div class="sc-comment" data-id="${id}">
+          <div class="sc-avatar">–</div>
+          <div class="sc-comment-body">
+            <div class="sc-comment-head"><span class="sc-comment-time">Comment removed</span></div>
+            <p class="sc-comment-text sc-deleted-text">This comment has been deleted.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    const date = data.createdAt ? formatDate(data.createdAt.toDate()) : "just now";
+    const safeName = escapeHtml(data.name || "Anonymous");
+    const safeText = escapeHtml(data.text || "");
+    const initial = safeName.trim().charAt(0).toUpperCase() || "?";
+    const avatar = data.photoURL ? `<img src="${escapeHtml(data.photoURL)}" alt="">` : initial;
+
+    const likes = data.likes || {};
+    const likeCount = Object.keys(likes).length;
+    const userLiked = !!(currentUser && likes[currentUser.uid]);
+
+    const reactions = data.reactions || {};
+    const reactionButtons = REACTION_EMOJIS.map((emoji) => {
+      const reactors = reactions[emoji] || {};
+      const count = Object.keys(reactors).length;
+      const active = !!(currentUser && reactors[currentUser.uid]);
+      return `
+        <button class="sc-emoji-btn${active ? " sc-active" : ""}" data-action="reaction" data-id="${id}" data-emoji="${emoji}" data-active="${active}" aria-label="React with ${emoji}">
+          <span>${emoji}</span>${count > 0 ? `<span class="sc-emoji-count">${count}</span>` : ""}
+        </button>
+      `;
+    }).join("");
+
+    const isOwn = !!(currentUser && currentUser.uid === data.uid);
+    const editedTag = data.editedAt ? `<span class="sc-edited-tag">(edited)</span>` : "";
+    const pendingTag = (!data.approved && isOwn)
+      ? `<span class="sc-edited-tag">(awaiting approval — only visible to you)</span>`
+      : "";
+
+    return `
+      <div class="sc-comment" data-id="${id}">
+        <div class="sc-avatar">${avatar}</div>
+        <div class="sc-comment-body">
+          <div class="sc-comment-head">
+            <span class="sc-comment-name">${safeName}</span>
+            <span class="sc-comment-time">${date}</span>
+            ${editedTag}
+            ${pendingTag}
+          </div>
+          <p class="sc-comment-text">${safeText}</p>
+          <div class="sc-actions">
+            <button class="sc-like-btn${userLiked ? " sc-active" : ""}" data-action="like" data-id="${id}" data-active="${userLiked}" aria-label="Like this comment">
+              <span>${userLiked ? "❤️" : "🤍"}</span>${likeCount > 0 ? `<span class="sc-like-count">${likeCount}</span>` : ""}
+            </button>
+            ${reactionButtons}
+            ${!isReply ? `<button class="sc-text-btn" data-action="reply" data-id="${id}">Reply</button>` : ""}
+            ${isOwn ? `<button class="sc-text-btn" data-action="edit" data-id="${id}">Edit</button>` : ""}
+            ${isOwn ? `<button class="sc-text-btn" data-action="delete" data-id="${id}">Delete</button>` : ""}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // --- Delegated click handling for all comment actions ---
+  feedEl.addEventListener("click", async (e) => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    const commentId = btn.dataset.id;
+
+    if (action === "reply") {
+      if (!currentUser) { alert("Sign in with Google to reply."); return; }
+      openReplyForm(commentId, btn.closest(".sc-comment-body"));
+      return;
+    }
+
+    if (action === "edit") {
+      if (!currentUser) return;
+      const docSnap = findDoc(commentId);
+      if (!docSnap) return;
+      const newText = prompt("Edit your comment:", docSnap.data().text || "");
+      if (newText === null) return;
+      const trimmed = newText.trim().slice(0, MAX_LENGTH);
+      if (!trimmed || trimmed === docSnap.data().text) return;
+      try {
+        await updateDoc(doc(db, "comments", commentId), { text: trimmed, editedAt: serverTimestamp() });
+      } catch (err) {
+        console.error("Failed to edit comment:", err);
+        alert("Could not save your edit.");
+      }
+      return;
+    }
+
+    if (action === "delete") {
+      if (!currentUser) return;
+      if (!confirm("Delete this comment? This can't be undone.")) return;
+      try {
+        await updateDoc(doc(db, "comments", commentId), { text: "", deleted: true, editedAt: serverTimestamp() });
+      } catch (err) {
+        console.error("Failed to delete comment:", err);
+        alert("Could not delete comment.");
+      }
+      return;
+    }
+
+    // like / reaction
+    if (!currentUser) { alert("Sign in with Google to like or react to comments."); return; }
+    const isActive = btn.dataset.active === "true";
+    const commentRef = doc(db, "comments", commentId);
+    const uid = currentUser.uid;
+
+    btn.disabled = true;
+    try {
+      if (action === "like") {
+        await updateDoc(commentRef, {
+          [`likes.${uid}`]: isActive ? deleteField() : true,
+          likeCount: increment(isActive ? -1 : 1)
+        });
+      } else if (action === "reaction") {
+        const emoji = btn.dataset.emoji;
+        await updateDoc(commentRef, {
+          [`reactions.${emoji}.${uid}`]: isActive ? deleteField() : true
+        });
+      }
+    } catch (err) {
+      console.error("Failed to update reaction:", err);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  function openReplyForm(parentId, containerEl) {
+    document.querySelectorAll(".sc-reply-compose").forEach((el) => el.remove());
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "sc-reply-compose";
+    wrapper.innerHTML = `
+      <textarea maxlength="${MAX_LENGTH}" placeholder="Write a reply..."></textarea>
+      <div class="sc-reply-compose-actions">
+        <button type="button" class="sc-btn sc-btn-small sc-reply-submit">Post reply</button>
+        <button type="button" class="sc-btn sc-btn-ghost sc-reply-cancel">Cancel</button>
+      </div>
+    `;
+    containerEl.appendChild(wrapper);
+    const replyTextarea = wrapper.querySelector("textarea");
+    replyTextarea.focus();
+
+    wrapper.querySelector(".sc-reply-cancel").addEventListener("click", () => wrapper.remove());
+    wrapper.querySelector(".sc-reply-submit").addEventListener("click", async () => {
+      const text = replyTextarea.value.trim();
+      if (!text) return;
+      const btn = wrapper.querySelector(".sc-reply-submit");
+      btn.disabled = true;
+      try {
+        await postComment(text, parentId);
+        wrapper.remove();
+      } catch (err) {
+        console.error("Failed to post reply:", err);
+        alert("Could not post reply.");
+        btn.disabled = false;
+      }
+    });
+  }
+
+  function findDoc(id) {
+    return latestDocs ? latestDocs.find((d) => d.id === id) : null;
+  }
+
+  function formatDate(date) {
+    return date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) +
+      " at " + date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+</script>
+{% endif %}
