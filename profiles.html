@@ -1,0 +1,16 @@
+---
+layout: page
+title: Profiles
+subtitle: Sahyadri Connect contributors and profiles
+permalink: /profiles/
+---
+
+<div class="post-list">
+{% assign people = site.profiles | sort: 'title' %}
+{% for profile in people %}
+  <article class="tag-entry">
+    <h3><a href="{{ profile.url | relative_url }}">{{ profile.title }}</a></h3>
+    {% if profile.subtitle %}<p>{{ profile.subtitle }}</p>{% endif %}
+  </article>
+{% endfor %}
+</div>
