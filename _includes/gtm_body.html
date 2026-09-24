@@ -1,6 +1,13 @@
-<!-- FILE: _includes/gtm_body.html — Google Tag Manager noscript fallback. -->
+<!-- FILE: _includes/gtm_body.html — Google Tag Manager <noscript> fallback iframe, placed immediately after <body>. -->
 {% if site.gtm %}
-<noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id={{ site.gtm }}" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
+  <!-- Google Tag Manager (noscript) -->
+  <!-- Fallback iframe container to maintain tracking capabilities when JavaScript is disabled -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id={{ site.gtm }}" 
+            height="0" 
+            width="0" 
+            style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
 {% endif %}
