@@ -1,0 +1,2775 @@
+/*
+ * custom-styles.css — Sahyadri Connect
+ * Overrides for beautifuljekyll.css (which uses CSS vars and Bootstrap)
+ * and beautifuljekyll-minimal.css (which sets container widths to 85% !important).
+ * !important is used only where upstream stylesheets require it to be overridden.
+ */
+
+
+/* ============================================================
+   1. TYPOGRAPHY — FONTS & FLUID SIZES
+   !important needed: beautifuljekyll.css sets font-family via var(--body-font)
+   and var(--header-font) on all these elements.
+   ============================================================ */
+
+body, p, div {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: clamp(1rem, 0.5rem + 0.68vw, 2.5rem);
+    color: #404040;
+}
+
+h1,
+.term-title,
+.post-title {
+    font-family: 'Amatic SC', cursive !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
+
+h1        { font-size: clamp(3.5rem, 3.5rem + 3.5vw, 10rem) !important; margin-bottom: 20px !important; }
+h2        { font-size: clamp(1rem, 0.75rem + 2.25vw, 4rem) !important; margin-top: 25px !important; margin-bottom: 15px !important; }
+h3        { font-family: 'Montserrat', sans-serif !important; font-weight: 300 !important; font-size: clamp(1.25rem, 0.75rem + 1.0vw, 4rem) !important; margin-top: 20px !important; }
+
+.term-title      { font-size: clamp(2rem, 1.5rem + 2.73vw, 8rem) !important; }
+.post-title      { font-family: 'Amatic SC', cursive !important; font-size: clamp(2rem, 1.5rem + 1.0vw, 4.5rem) !important; font-weight: bold !important; text-transform: uppercase; }
+.post-subtitle   { font-family: 'Amatic SC', cursive !important; font-size: clamp(1rem, 0.5rem + 1.0vw, 3.5rem) !important; margin-top: 5px !important; font-weight: bold; }
+.post-subheading { font-family: 'Amatic SC', cursive !important; font-size: clamp(1rem, 0.5rem + 1.0vw, 3.5rem) !important; margin-top: 5px !important; }
+.post-heading    { margin-top: 10px; }
+.post-entry      { font-family: 'Montserrat', sans-serif !important; font-size: clamp(0.75rem, 0.5rem + 0.6vw, 2rem) !important; }
+.post-meta       { font-family: 'Poiret One', system-ui, sans-serif !important; font-size: clamp(0.65rem, 0.45rem + 0.7vw, 2.5rem) !important; font-weight: 400 !important; }
+
+.blog-tags,
+.post-categories,
+.page-subheading {
+    font-family: 'Amatic SC', sans-serif !important;
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page-subheading { font-weight: bold; }
+
+
+/* ============================================================
+   2. LAYOUT — HEADER, BODY & FOOTER WIDTHS
+   !important needed: beautifuljekyll-minimal.css sets 85% !important on these.
+   ============================================================ */
+
+/* Header: full-bleed up to 1200px */
+.intro-header .container,
+.intro-header .container-md,
+.intro-header .container-lg {
+    max-width: 1200px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+}
+
+/* Main content and footer: 90% width */
+main.container-md,
+.container-md,
+.container-lg,
+.beautiful-jekyll-footer {
+    max-width: 90% !important;
+    width: 90% !important;
+    margin: 0 auto !important;
+}
+
+/* Bootstrap column reset inside main */
+main .col-xl-8,
+main .col-lg-10 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+}
+
+/* Mobile */
+@media (max-width: 992px) {
+    main.container-md,
+    .beautiful-jekyll-footer {
+        max-width: 95% !important;
+        width: 95% !important;
+    }
+}
+
+
+/* ============================================================
+   3. NAVBAR
+   !important needed: beautifuljekyll.css sets color via var(--navbar-text-col)
+   on .navbar-custom .navbar-brand and .navbar-nav .nav-link.
+   ============================================================ */
+
+/* Higher specificity to beat _navbar.scss which sets font-size: 1.25rem */
+.navbar-custom .navbar-brand,
+.navbar-expand-xl .navbar-brand,
+a.navbar-brand {
+    font-family: 'Amatic SC', sans-serif !important;
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+    color: #E8F3DF !important;
+}
+.navbar-custom .navbar-brand:hover,
+a.navbar-brand:hover {
+    color: #FFFFFF !important;
+}
+
+.navbar .nav-link,
+.navbar-custom .nav-link {
+    font-family: 'Poiret One', system-ui, sans-serif !important;
+    text-transform: uppercase;
+    color: #E8F3DF !important;
+    font-size: clamp(0.8rem, 0.25vw + 0.75rem, 1.1rem) !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.navbar .nav-link:hover,
+.navbar-custom .nav-link:hover {
+    color: #FFFFFF !important;
+}
+
+.navbar-custom .nav-link.dropdown-toggle {
+    font-size: clamp(0.9rem, 0.25vw + 0.75rem, 1.15rem) !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.dropdown-toggle::after {
+    vertical-align: middle;
+}
+
+.navbar-custom .nav-item.dropdown .dropdown-menu .dropdown-item {
+    font-family: 'Poiret One', system-ui, sans-serif !important;
+    font-weight: bold !important;
+}
+
+/* Ensure navbar items stay on one line and perfectly aligned */
+.navbar-custom .navbar-nav {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    display: flex !important;
+}
+.navbar-custom .navbar-nav .nav-item {
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.navbar-custom .navbar-nav .nav-link {
+    padding: 0.5rem 0.75rem !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+.navbar-custom .navbar-nav .dropdown-toggle::after {
+    margin-left: 0.5rem;
+}
+
+/* Dropdown item word-wrap */
+.dropdown-item {
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    word-break: keep-all !important;
+}
+
+/* Desktop hover-open dropdowns */
+@media (min-width: 992px) {
+    .navbar-nav .dropdown:hover > .dropdown-menu {
+        display: block !important;
+        margin-top: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    .dropdown-menu {
+        display: block !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: all 0.3s ease !important;
+    }
+}
+
+
+/* ============================================================
+   4. FOOTER
+   !important needed: beautifuljekyll.css sets font-size and family on footer elements.
+   ============================================================ */
+
+.beautiful-jekyll-footer h3 {
+    font-family: 'Poiret One', system-ui, sans-serif !important;
+    font-weight: bold !important;
+    font-size: clamp(1.25rem, 0.65rem + 1.0vw, 3rem) !important;
+    margin-bottom: 1rem;
+}
+
+.beautiful-jekyll-footer p,
+.beautiful-jekyll-footer div {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: clamp(0.75rem, 0.35rem + 0.5vw, 2rem) !important;
+    line-height: 1.5;
+}
+
+.beautiful-jekyll-footer a {
+    color: inherit;
+    text-decoration: underline;
+    transition: opacity 0.2s;
+}
+.beautiful-jekyll-footer a:hover {
+    opacity: 0.8;
+}
+
+.copyright.text-muted {
+    font-family: 'Poiret One', system-ui, sans-serif !important;
+    text-transform: uppercase !important;
+    font-weight: bold !important;
+    font-size: clamp(0.7rem, 0.5rem + 0.5vw, 1.8rem) !important;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .beautiful-jekyll-footer {
+        max-width: 90% !important;
+        width: 90% !important;
+    }
+}
+
+
+/* ============================================================
+   5. SEARCH OVERLAY
+   !important needed: beautifuljekyll.css sets background, font-size, width on these.
+   ============================================================ */
+
+#beautifuljekyll-search-overlay {
+    background-color: rgba(93, 109, 90, 0.3) !important;
+    backdrop-filter: blur(4px);
+    z-index: 9999 !important;
+    position: fixed;
+    text-align: center;
+}
+
+#nav-search-input {
+    background-color: #ffffff !important;
+    color: #404040 !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 300 !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    width: 40% !important;
+    height: 32px !important;
+    padding: 0 40px 0 20px !important;
+    border-radius: 20px !important;
+    margin: 25px auto 0 auto !important;
+    display: block !important;
+    font-size: 0.95rem !important;
+}
+
+#nav-search-input::placeholder {
+    font-family: 'Amatic SC', cursive !important;
+    font-size: 1.1rem !important;
+    color: #BDCDC0 !important;
+    text-transform: uppercase;
+}
+
+#nav-search-exit,
+#beautifuljekyll-search-close {
+    color: #888 !important;
+    font-size: 1.1rem !important;
+    cursor: pointer;
+    background: none !important;
+    border: none !important;
+    position: absolute !important;
+    top: 33px !important;
+    left: calc(50% + 20% - 30px) !important;
+    z-index: 10001 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+}
+#nav-search-exit:hover {
+    color: #404040 !important;
+}
+
+#beautifuljekyll-search-results {
+    max-width: 40% !important;
+    margin: 15px auto !important;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+}
+#beautifuljekyll-search-results li a {
+    font-family: 'Amatic SC', cursive !important;
+    font-size: 1.4rem !important;
+    color: #ffffff !important;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    #nav-search-input {
+        width: 85% !important;
+        margin-top: 20px !important;
+    }
+    #nav-search-exit,
+    #beautifuljekyll-search-close {
+        left: calc(50% + 42.5% - 30px) !important;
+        top: 28px !important;
+    }
+}
+
+
+/* ============================================================
+   6. POST FEED — NEWSLETTER LAYOUT (TOC SIDEBAR + POSTS LIST)
+   No upstream conflicts — no !important needed.
+   ============================================================ */
+
+/* scroll-behavior: smooth — re-enabled sitewide. The earlier unwanted
+   auto-scroll-on-page-load bug was actually caused by a JS function
+   (kfi.html's switchAcademicYear) calling scrollIntoView()
+   unconditionally on DOMContentLoaded, not by this CSS property itself.
+   That JS call is now gated behind `if (evt)` so it only fires on real
+   user clicks — safe to restore smooth scrolling for all anchor-link
+   navigation (TOC category links, back-to-top links, tag links, etc.)
+   across the site. */
+html { scroll-behavior: smooth; }
+
+/* Accessibility: beautifuljekyll.css hardcodes --mid-col: #808080 (used
+   for .post-meta post-listing dates, among other things) with no
+   dark-mode variant. #808080 on white is 3.95:1, failing WCAG AA's
+   4.5:1 for normal text; the same color on the dark-mode background is
+   4.41:1, also just under. Overridden here (rather than editing the
+   theme file) since custom-styles.css loads after it, so these win the
+   cascade normally with no !important needed. */
+:root {
+    --mid-col: #757575;
+}
+.dark-mode {
+    --mid-col: #858585;
+}
+
+/* .post-entry-container / .post-image / .post-image img used to be
+   defined here too, for an older vertical-stacked card design (full-
+   width image, flex-direction: column). That design was superseded by
+   the current side-by-side thumbnail layout (section "Post/activity
+   card elements" below), but this old block was never removed. Since
+   both blocks target the exact same class names with no extra scoping,
+   the browser was merging them: this block's flex-direction: column
+   was silently overriding the newer block's implicit row default even
+   on desktop, and its unique properties (max-height, transition) were
+   leaking into cards that were never designed to have them. Removed
+   entirely -- the later, complete definition is the only one needed. */
+
+/* Moved from activities.md/posts.md's own inline <style> blocks (identical
+   in both). Scoped to .newsletter-container rather than a bare `img`
+   selector, since a truly global img rule here could affect other pages'
+   image requirements (videos/photos/kfi/profiles all have their own
+   deliberate image handling). */
+.newsletter-container img {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 100%;
+    height: auto;
+}
+
+.category-heading {
+    font-family: 'Amatic SC', sans-serif !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    font-size: clamp(1.75rem, 1.25rem + 2.73vw, 7rem) !important;
+    border-bottom: 2px solid #735362;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    color: #404040;
+    /* scroll-margin-top: 80px; */ /* removed to fix auto-scroll */
+}
+
+.back-to-top a {
+    font-family: 'Poiret One', system-ui, sans-serif !important;
+    font-size: 1.5rem;
+    color: #735362;
+    text-decoration: none;
+}
+
+/* Consolidated from what used to be three separate .back-navigation
+   blocks scattered across this file (one setting margin-top: 15px that
+   a second, immediately-adjacent block silently overrode with
+   !important, plus a third far below re-overriding margin-bottom).
+   Kept only the properties that actually took effect. */
+.back-navigation {
+    margin-top: 140px !important;
+    margin-bottom: 0.15rem;
+    display: block !important;
+}
+.back-navigation a {
+    color: #735362;
+    text-decoration: none;
+}
+
+@media (min-width: 992px) {
+    .newsletter-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 5%;
+    }
+    .toc-sidebar {
+        flex: 0 0 20%;
+        position: sticky;
+        /* The fixed navbar occupies ~5rem (80px) of vertical space (same
+           value .intro-header uses to clear it) -- top needed to be at
+           least that much, or the sidebar sticks to a point still hidden
+           behind the navbar. 90px = navbar clearance + a small visible
+           gap once stuck.
+
+           MAINTENANCE NOTE: .profile-toc-sidebar (Profiles page, further
+           down this file) is a SEPARATE implementation of the same idea
+           -- a static list of anchor links here vs. buttons the Profiles
+           page's JS builds and filters at runtime (see that page's own
+           doc comment for why). Nothing keeps these two in sync: this
+           top value, or any other sitewide layout change (navbar height,
+           spacing, colors) that should visually apply to both, has to be
+           changed in both places by hand. */
+        top: 90px;
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+        margin-top: 2vw !important;
+    }
+    .posts-list       { flex: 0 0 75%; }
+    .post-entry-container { flex-direction: row; }
+    .post-image       { flex: 0 0 40%; }
+}
+
+
+/* ============================================================
+   7. TABLE OF CONTENTS (TOC CARD)
+   No upstream conflicts — no !important needed.
+   ============================================================ */
+
+
+.toc-card {
+    background-color: #BDCDC0 !important;
+    padding: 25px;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.toc-title,
+.toc-card h2.toc-title {
+    font-family: 'Amatic SC', cursive !important;
+    font-size: clamp(2rem, 1.5rem + 1.5vw, 5rem) !important;
+    margin: 0 0 15px 0;
+    color: #404040 !important;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+}
+.toc-list li {
+    margin-bottom: 12px;
+    font-family: 'Amatic SC', cursive !important;
+    font-size: 1.8rem !important;
+    cursor: pointer;
+    color: #404040;
+    transition: all 0.3s ease;
+}
+.toc-list li:hover,
+.toc-list li.active {
+    color: #ffffff;
+    padding-left: 10px;
+    font-weight: bold;
+}
+.toc-list a {
+    font-family: 'Amatic SC', sans-serif !important;
+    font-weight: bold !important;
+    font-size: clamp(1.2rem, 0.8rem + 1vw, 2.8rem) !important;
+    color: #404040 !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+.toc-list a:hover {
+    color: #ffffff !important;
+    transform: translateX(8px);
+}
+
+
+/* ============================================================
+   8. PHOTOS PAGE
+   No upstream conflicts — no !important needed.
+   ============================================================ */
+
+/* Moved from photos.html's own inline <style> block. Note: this replaces
+   an older, unrelated flex/sidebar version of this same selector (plus a
+   .photos-content rule) left over from a previous page redesign — that
+   version's markup (.photos-content, a TOC sidebar here) no longer exists
+   on this page, so it was dead code sharing a name with this current,
+   unrelated single-column block layout. */
+.photos-page-container {
+    display: block;
+    width: 100%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 992px) {
+    .toc-sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    main.container-md,
+    .beautiful-jekyll-footer {
+        max-width: 95% !important;
+        width: 95% !important;
+    }
+}
+
+
+/* ============================================================
+   9. ALBUM GRID
+   No upstream conflicts — no !important needed.
+   ============================================================ */
+
+.academic-toc {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 40px auto;
+    flex-wrap: wrap;
+    max-width: 1200px;
+}
+
+.year-album-card {
+    width: 180px;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+.year-album-card:hover { transform: translateY(-5px); }
+.year-album-card .thumb-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #f7faf8;
+    border: 2px solid #6d8571;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.year-album-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+.year-album-card.active img { opacity: 1; }
+.year-album-card.active .thumb-wrapper {
+    outline: 3px solid #6d8571;
+    box-shadow: 0 4px 15px rgba(109, 133, 113, 0.4);
+}
+.year-album-card p {
+    margin-top: 10px;
+    font-family: 'Amatic SC', cursive !important;
+    font-size: 1.5rem !important;
+    font-weight: bold;
+    color: #404040;
+}
+
+.album-grid {
+    /* Switched from CSS Grid to Flexbox: Grid's auto-fill tracks always
+       left-align an incomplete last row (e.g. a single leftover photo
+       sits at the far left instead of centered). Flexbox's
+       justify-content: center naturally centers any incomplete row,
+       and .album-item already had a flex-basis set below (previously
+       unused under Grid), confirming this was the original intent. */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+.album-item {
+    /* flex-basis 300px matches the original grid's minmax(300px, 1fr)
+       minimum, with grow allowed up to a capped max-width so items
+       still fill space nicely across however many columns fit,
+       without a lone leftover item stretching to an oddly wide size. */
+    flex: 1 1 300px;
+    max-width: 360px;
+    margin: 0;
+    text-align: center;
+}
+.album-item img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+.album-item a:hover img { transform: scale(1.03); }
+.album-item figcaption {
+    margin-top: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #404040;
+}
+
+@media (max-width: 768px) {
+    .album-item { flex: 0 1 100%; }
+}
+
+
+/* ============================================================
+   10. VIDEO GRID
+   No upstream conflicts — no !important needed.
+   ============================================================ */
+
+.video-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+.video-item {
+    flex: 0 1 calc(50% - 20px);
+    margin: 0;
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    background-color: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.video-wrapper img,
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-item figcaption {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.video-caption a {
+    color: #008aff;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .video-item { flex: 0 1 100%; }
+}
+
+
+/* ============================================================
+   11. LOAD MORE BUTTON
+   No upstream conflicts — no !important needed.
+   ============================================================ */
+
+.load-more-container {
+    text-align: center;
+    width: 100%;
+    margin: 40px 0;
+}
+
+.btn-load-more {
+    display: inline-block;
+    background-color: #5d6d5a;
+    color: #ffffff;
+    font-family: 'Amatic SC', cursive;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    padding: 12px 36px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    outline: none;
+}
+/* Accessibility: outline: none above removed the default focus
+   indicator with no replacement -- a keyboard user tabbing to this
+   button previously got no visible indication of focus at all. Only
+   shows for real keyboard focus (:focus-visible), not mouse clicks. */
+.btn-load-more:focus-visible {
+    outline: 3px solid #8FA186;
+    outline-offset: 2px;
+}
+.btn-load-more:hover {
+    background-color: #4a5748;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+.btn-load-more:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+/* ============================================================
+   12. NINAD / PDF CARD GRID
+   No upstream conflicts — no !important needed.
+   ============================================================ */
+
+.pdf-grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.ninad-card {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+    overflow: hidden;
+}
+.ninad-card:hover { transform: translateY(-8px); }
+
+.ninad-caption-banner {
+    background-color: #f7fff7;
+    color: #333;
+    padding: 12px 5px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 15px 0 0 0;
+    order: 1;
+    border-top: 1px solid #e0e0e0;
+    /* Cards with shorter one-line captions were leaving a visible gap
+       of empty card background below the banner, since flexbox
+       stretches sibling cards to equal height (matching whichever
+       card has the longer, wrapped caption text) but the banner
+       itself only took up its natural one-line height. flex-grow
+       makes the banner itself absorb that leftover space instead,
+       and the flex centering keeps the text vertically centered
+       within whatever height it ends up needing. */
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ninad-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 992px) {
+    .pdf-container { flex: 0 0 calc(33.33% - 17px); }
+}
+@media (max-width: 768px) {
+    .pdf-grid-container { gap: 15px; }
+    .pdf-container {
+        flex: 0 0 calc(50% - 8px);
+        margin-bottom: 15px;
+    }
+    .pdf-btn-primary {
+        font-size: 10px;
+        padding: 8px 2px;
+        margin: 5px 4px 4px 4px;
+    }
+    .pdf-img { margin-bottom: 10px; }
+}
+
+
+/* ============================================================
+   13. UTILITY
+   ============================================================ */
+
+.hidden-item { display: none !important; }
+
+
+/* ============================================================
+   14. LAYOUT-SPECIFIC STYLES (moved from inline <style> blocks
+   in post.html, events.html, profile.html for consistency)
+   ============================================================ */
+
+/* --- Post/Activity image gallery (post.html) --- */
+.post-image-gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 25px auto 35px auto;
+    width: 100%;
+}
+@media (min-width: 800px) {
+    .post-image-gallery.gallery-1 { grid-template-columns: 1fr; }
+    .post-image-gallery.gallery-2 { grid-template-columns: repeat(2, 1fr); }
+    .post-image-gallery.gallery-3,
+    .post-image-gallery.gallery-4,
+    .post-image-gallery.gallery-5 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1200px) {
+    .post-image-gallery.gallery-3,
+    .post-image-gallery.gallery-4,
+    .post-image-gallery.gallery-5 { grid-template-columns: repeat(3, 1fr); }
+}
+.post-image-cell { text-align: center; }
+.post-img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+    object-fit: cover;
+}
+
+/* --- Post/Activity container spacing --- */
+.post-container {
+    padding-top: 40px;
+    position: relative;
+}
+.post-subheading,
+.post-subtitle,
+.post-subtitle2 {
+    font-family: 'Amatic SC', cursive, sans-serif;
+}
+.post-subheading a {
+    font-family: inherit;
+    color: #5f745f;
+    text-decoration: none;
+}
+.post-subheading a:hover {
+    text-decoration: underline;
+}
+
+/* --- Profile page avatar (profile.html) --- */
+.profile-pic {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    max-width: 100%;
+    border: 3px solid #BDCDC0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+.profile-pic:hover {
+    transform: scale(1.03);
+}
+.profile-header .post-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.profile-header .post-subtitle {
+    font-size: 1.25rem;
+}
+
+/* --- Default layout empty header accent (default.html) --- */
+/* --- Post preview cards (posts.md, activities.md) --- */
+.post-preview-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    list-style: none;
+}
+.post-preview-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   16. SEARCH NO-RESULTS MESSAGE
+   ============================================================ */
+
+.search-no-results {
+    font-family: 'Amatic SC', cursive !important;
+    font-size: 1.4rem !important;
+    color: #BDCDC0 !important;
+    text-align: center;
+    list-style: none;
+    padding: 20px 0;
+}
+
+/* ============================================================
+   17. DARK MODE TOGGLE
+   Activated by adding class="dark-mode" to <body> via JS toggle.
+   ============================================================ */
+
+.dark-mode,
+.dark-mode body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+/* Footer: darken BOTH the outer wrapper and inner container */
+.dark-mode .beautiful-jekyll-footer-wrapper {
+    background-color: #141713 !important;
+}
+.dark-mode .beautiful-jekyll-footer {
+    background-color: #141713 !important;
+    color: #d5d5d5;
+}
+.dark-mode .beautiful-jekyll-footer a {
+    color: #9fd4a3;
+}
+.dark-mode .beautiful-jekyll-footer h3 {
+    color: #e8f3df;
+}
+/* Bootstrap's .text-muted is unreadable on dark backgrounds — override it */
+.dark-mode .beautiful-jekyll-footer .text-muted,
+.dark-mode .copyright.text-muted,
+.dark-mode .design-credits.text-muted {
+    color: #9a9a9a !important;
+}
+.dark-mode .student-credit-box .footer-note {
+    color: #b5b5b5;
+}
+
+.dark-mode .toc-card {
+    background-color: #1f2a1f !important;
+    color: #e0e0e0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+.dark-mode .toc-title,
+.dark-mode .toc-card h2.toc-title {
+    color: #e8f3df !important;
+    border-bottom-color: #5a6a56;
+}
+.dark-mode .toc-list li {
+    color: #cfd8cc;
+}
+.dark-mode .toc-list li:hover,
+.dark-mode .toc-list li.active {
+    color: #ffffff;
+}
+.dark-mode .toc-list a {
+    color: #cfd8cc !important;
+}
+.dark-mode .toc-list a:hover {
+    color: #ffffff !important;
+}
+
+/* Profiles page TOC uses <button> elements instead of <a> links —
+   these need their own color override since buttons don't inherit
+   text color the way inline text does. */
+.dark-mode .toc-list button {
+    color: #cfd8cc !important;
+}
+.dark-mode .toc-list button:hover,
+.dark-mode .toc-list button.active {
+    color: #ffffff !important;
+}
+.dark-mode .post-preview-card,
+.dark-mode .ninad-card {
+    background-color: #242424;
+    border-color: #3a3a3a;
+    color: #e0e0e0;
+}
+.dark-mode h1, .dark-mode h2, .dark-mode h3,
+.dark-mode p, .dark-mode div, .dark-mode span {
+    color: #e0e0e0;
+}
+.dark-mode .navbar-custom {
+    background-color: #1f2a1f !important;
+}
+
+/* Navbar dropdown menus (RESOURCES, INFORMATION) in dark mode */
+.dark-mode .dropdown-menu {
+    background-color: #22281f !important;
+    border: 1px solid #3a4536 !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+}
+.dark-mode .dropdown-item {
+    background-color: transparent !important;
+    color: #cfd8cc !important;
+}
+.dark-mode .dropdown-item:hover,
+.dark-mode .dropdown-item:focus {
+    background-color: #34402f !important;
+    color: #ffffff !important;
+}
+.dark-mode a {
+    color: #9fd4a3;
+}
+
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    color: #E8F3DF;
+    font-size: 1rem;
+    margin-left: 12px;
+    transition: all 0.25s ease;
+}
+.dark-mode-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: #ffffff;
+    transform: rotate(15deg);
+}
+.dark-mode .dark-mode-toggle {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #f2d98a;
+}
+.dark-mode .dark-mode-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+    border-color: #f2d98a;
+}
+
+
+/* ============================================================
+   19. PAGINATION BUTTONS (Previous Post / Next Post)
+   ============================================================ */
+
+/* Small gap between the pagination row and the comment widget below it */
+.pagination.blog-pager,
+.pagination.main-pager {
+    margin-bottom: 30px;
+}
+
+.blog-pager .page-link,
+.main-pager .page-link {
+    font-family: 'Poiret One', system-ui, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: #f7faf8;
+    color: #404040;
+    border: 1px solid #d0d8d0;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: all 0.2s ease;
+}
+.blog-pager .page-link:hover,
+.main-pager .page-link:hover {
+    background-color: #BDCDC0;
+    color: #ffffff;
+    border-color: #BDCDC0;
+}
+.blog-pager .page-item.disabled .page-link,
+.main-pager .page-item.disabled .page-link {
+    background-color: #f7faf8;
+    color: #b0b0b0;
+    border-color: #e5e5e5;
+    opacity: 0.7;
+}
+
+/* Dark mode pagination — no !important needed: 3-class specificity
+   (.dark-mode + .blog-pager + .page-link) already beats the 2-class
+   base rule regardless of source order. */
+.dark-mode .blog-pager .page-link,
+.dark-mode .main-pager .page-link {
+    background-color: #242424;
+    color: #cfd8cc;
+    border-color: #3a3a3a;
+}
+.dark-mode .blog-pager .page-link:hover,
+.dark-mode .main-pager .page-link:hover {
+    background-color: #3a5a3a;
+    color: #ffffff;
+    border-color: #3a5a3a;
+}
+.dark-mode .blog-pager .page-item.disabled .page-link,
+.dark-mode .main-pager .page-item.disabled .page-link {
+    background-color: #1c1c1c;
+    color: #666666;
+    border-color: #333333;
+}
+
+
+/* ============================================================
+   20. AUTHOR BYLINE LINK — DARK MODE BRIGHTNESS
+   Overrides the muted olive-green author link color (set inline
+   in posts.md / activities.md and in post.html's post-subheading)
+   with a brighter tone for readability against dark backgrounds.
+   No !important needed: .dark-mode adds an extra class, giving
+   this higher specificity than the base rules regardless of
+   source order.
+   ============================================================ */
+
+.dark-mode .post-subtitle a,
+.dark-mode .post-subheading a {
+    color: #a3c99a;
+}
+.dark-mode .post-subtitle a:hover,
+.dark-mode .post-subheading a:hover {
+    color: #c5e0bc;
+}
+
+
+/* ============================================================
+   21. ELFSIGHT COMMENTS WIDGET — CONTAINER WIDTH
+   The widget's outer wrapper div is part of the host page's own
+   DOM (not sandboxed), so its width is safely controllable here.
+   Widened to 85% of the viewport, centered, to give the comment
+   panel more breathing room than the default post content width.
+   ============================================================ */
+
+.elfsight-app-2959381d-e116-43d1-ae7c-2499b54d5bec {
+    /* margin-left: 50% resolves against the PARENT container's width, not
+       the viewport — since this widget sits inside a narrower centered
+       column (.container-md / .col-lg-10), that approach only centered
+       it within that narrower box. Using vw-based negative margins here
+       instead, since vw units always reference the true viewport width
+       regardless of how deeply nested the element is. */
+    width: 85vw;
+    max-width: 85vw;
+    position: relative;
+    left: 50%;
+    margin-left: -42.5vw;
+}
+
+@media (max-width: 768px) {
+    .elfsight-app-2959381d-e116-43d1-ae7c-2499b54d5bec {
+        width: 95vw;
+        max-width: 95vw;
+        margin-left: -47.5vw;
+    }
+}
+
+
+/* ============================================================
+   22. ELFSIGHT COMMENTS WIDGET — DARK MODE SYNC
+   Elfsight's internal styling isn't directly reachable from our
+   site CSS (may render via iframe or an isolated stylesheet), so
+   instead of guessing internal class names we use a filter-based
+   color inversion on the whole widget. This works regardless of
+   the widget's internal implementation, and updates live/instantly
+   the moment the .dark-mode class toggles (pure CSS, no extra JS).
+
+   Trade-off: this is a visual approximation, not pixel-perfect
+   theming — colors get inverted then hue-rotated back toward
+   their original tone, which looks convincing for a white-card
+   widget like this but can slightly shift saturated colors.
+   ============================================================ */
+
+.dark-mode .elfsight-app-2959381d-e116-43d1-ae7c-2499b54d5bec {
+    filter: invert(0.92) hue-rotate(180deg);
+    border-radius: 10px;
+    transition: filter 0.2s ease;
+}
+
+/* Counter-invert any logos/icons/avatars inside the widget (e.g. the
+   Google/Facebook sign-in icons, profile photos) so they display with
+   their correct original colors instead of being inverted too. */
+.dark-mode .elfsight-app-2959381d-e116-43d1-ae7c-2499b54d5bec img,
+.dark-mode .elfsight-app-2959381d-e116-43d1-ae7c-2499b54d5bec svg {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+
+
+/* ============================================================
+   24. PHOTO ALBUM CAPTIONS — DARK MODE READABILITY
+   .album-item figcaption has no explicit color set, so it was
+   inheriting the site's default dark-gray text (#404040), which
+   reads as low-contrast, washed-out text against the dark mode
+   background. Brightened for dark mode specifically.
+   No !important needed: since there's no explicit competing rule
+   for this selector (only inherited color), any explicit rule
+   wins automatically.
+   ============================================================ */
+
+.dark-mode .album-item figcaption,
+.dark-mode .photos-album-item figcaption {
+    color: #d5d5d5;
+}
+
+
+/* ============================================================
+   25. NINAD/PDF CARD CAPTION BANNER — DARK MODE
+   .ninad-caption-banner (used on ninad.md and geeth-gunjan.md)
+   has a near-white background with dark text, matching light
+   mode but clashing sharply against the dark background when
+   dark mode is on. Also overrides the same class defined inline
+   in geeth-gunjan.md's <style> block (same selector, same
+   specificity — !important guarantees this wins regardless of
+   source order).
+   ============================================================ */
+
+.dark-mode .ninad-card {
+    background-color: #242424 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+
+.dark-mode .ninad-caption-banner {
+    background-color: #2a2f28 !important;
+    color: #e0e0e0 !important;
+    border-top: 1px solid #444 !important;
+}
+
+
+/* ============================================================
+   26. NEWSLETTER/ACTIVITIES TABBED LISTING PAGES (posts.md, activities.md)
+   Consolidated from two ~90% identical inline <style> blocks that
+   had drifted slightly apart over time (activities.md was missing
+   a few defensive rules posts.md had picked up during earlier bug
+   fixes — e.g. the mobile .post-image/.post-image-a visibility
+   !important flags). This shared version applies both pages' most
+   complete/correct rules consistently.
+   ============================================================ */
+
+/* --- Tab bar --- */
+.tabs-container {
+    width: 100%;
+    margin: 2rem 0 3rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.academic-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.tab-link {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0.75rem 0;
+    font-size: 1.15rem;
+    font-weight: 500;
+    font-family: inherit;
+    color: #718096;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-link:hover, .tab-link.active {
+    color: #5f745f;
+    border-bottom: 3px solid #5f745f;
+}
+
+/* Accessibility: outline: none above removed the default focus
+   indicator with no replacement -- a keyboard user tabbing through
+   the year tabs previously got no visible indication of focus. */
+.tab-link:focus-visible {
+    outline: 3px solid #8FA186;
+    outline-offset: 2px;
+}
+
+/* --- Year panels --- */
+.academic-panel {
+    display: none;
+}
+
+.academic-panel.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Post/activity card elements --- */
+
+.post-subtitle {
+    font-family: 'Amatic SC', cursive, sans-serif !important;
+}
+
+.post-subtitle a {
+    font-family: inherit;
+    /* Darkened from #7a9670 (3.27:1 on white, fails WCAG AA's 4.5:1) */
+    color: #617959;
+    text-decoration: none;
+}
+
+.post-subtitle a:hover {
+    text-decoration: underline;
+}
+
+.post-entry-container {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    margin-top: 1rem;
+}
+
+/* Thumbnail container: fixed size + fixed aspect ratio so every card
+   looks uniform regardless of whether the source photo is portrait,
+   landscape, or square. */
+.post-image {
+    flex-shrink: 0;
+    width: 220px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.post-entry {
+    flex: 1;
+}
+
+.post-read-more {
+    display: inline-block;
+    margin-left: 0.5rem;
+    color: #5f745f;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.post-read-more:hover {
+    color: #3b4a3b;
+    text-decoration: underline;
+}
+
+.no-posts-msg {
+    color: #718096;
+    font-style: italic;
+    padding: 2rem 0;
+}
+
+/* --- Mobile layout --- */
+@media (max-width: 767px) {
+    .academic-tabs {
+        gap: 1rem;
+        justify-content: flex-start;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-link {
+        font-size: 1rem;
+        padding: 0.5rem 0.25rem;
+    }
+
+    .tabs-container {
+        margin: 1rem 0 2rem 0;
+    }
+
+    .post-entry-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* On mobile the thumbnail becomes a full-width banner above the
+       excerpt text; a fixed aspect ratio (instead of the desktop's
+       220px box) keeps it proportional at any screen width while still
+       capping tall portrait photos via object-fit: cover. */
+    .post-image {
+        flex-shrink: 0;
+        width: 85% !important;
+        aspect-ratio: 16 / 9;
+        padding: 0;
+        margin: 0 auto;
+        overflow: hidden;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .post-image a {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .post-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .post-entry {
+        width: 100%;
+        padding: 0 1rem;
+    }
+}
+
+
+/* ============================================================
+   27. YEAR-SCOPED SEARCH BOX (posts.md, activities.md)
+   Search input that filters cards within the currently active
+   .academic-panel only. Positioned directly below the year tabs.
+   ============================================================ */
+
+.year-search-container {
+    position: relative;
+    max-width: 420px;
+    margin: 1.5rem auto 0 auto;
+}
+
+.year-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.year-search-input {
+    width: 100%;
+    padding: 10px 38px 10px 38px;
+    border: 1px solid #d0d8d0;
+    border-radius: 20px;
+    background-color: #f7faf8;
+    color: #404040;
+    font-family: 'Poiret One', system-ui, sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.year-search-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #a0aec0;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.year-search-clear:hover {
+    color: #5f745f;
+}
+
+.dark-mode .year-search-clear:hover {
+    color: #7a9670;
+}
+
+.year-search-input:focus {
+    border-color: #5f745f;
+    box-shadow: 0 0 0 3px rgba(95, 116, 95, 0.15);
+}
+
+.year-search-input::placeholder {
+    color: #a0aec0;
+}
+
+.dark-mode .year-search-input {
+    background-color: #242424;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+.dark-mode .year-search-input::placeholder {
+    color: #888;
+}
+
+.dark-mode .year-search-input:focus {
+    border-color: #7a9670;
+    box-shadow: 0 0 0 3px rgba(122, 150, 112, 0.2);
+}
+
+/* Highlights the matched search term inside visible post-preview cards,
+   applied by yearSearchApplyHighlight() in the JS above. */
+mark.year-search-highlight {
+    background-color: #C5D6BE;
+    color: #000000;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.dark-mode mark.year-search-highlight {
+    background-color: #6d9467;
+    color: #1a1a1a;
+}
+
+
+/* ============================================================
+   28. TAG INDEX PAGE (tags.html)
+   Replaced the old row of tag pill buttons with a sticky TOC sidebar,
+   reusing the shared .toc-sidebar/.toc-card/.toc-title/.toc-list
+   classes from section 7 (same ones the Newsletter/Activities
+   "Editions" sidebar uses) rather than inventing a parallel set.
+   .tags-page-container/.tags-content mirror .newsletter-container/
+   .posts-list's role -- the flex layout wrapper and the content
+   column -- under page-specific names.
+   ============================================================ */
+
+@media (min-width: 992px) {
+    .tags-page-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 5%;
+    }
+    .tags-content { flex: 0 0 75%; }
+}
+
+/* Section headings for each tag group, matching the site's category-heading style */
+.linked-section {
+    font-family: 'Amatic SC', cursive, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: clamp(1.75rem, 1.25rem + 1.5vw, 3.5rem);
+    border-bottom: 2px solid #735362;
+    padding-bottom: 8px;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: #404040;
+    scroll-margin-top: 80px;
+}
+
+/* A little extra breathing room below the "Articles by" heading
+   specifically on profile pages, without changing the shared
+   .linked-section spacing used by the Tags page too. */
+.profile-written-by .linked-section {
+    margin-bottom: 1.5rem;
+}
+
+/* Individual post rows under each tag */
+.tag-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.tag-entry a {
+    color: #404040;
+    text-decoration: none;
+    font-family: 'Poiret One', system-ui, sans-serif;
+}
+
+.tag-entry a:hover {
+    color: #5f745f;
+    text-decoration: underline;
+}
+
+.entry-date {
+    flex-shrink: 0;
+    /* Darkened from #a0aec0 (2.26:1 on white, badly fails WCAG AA's 4.5:1) */
+    color: #5f7490;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* Dark mode */
+.dark-mode .linked-section {
+    color: #e8f3df;
+    border-bottom-color: #8a6a78;
+}
+
+.dark-mode .tag-entry {
+    border-bottom-color: #444;
+}
+
+.dark-mode .tag-entry a {
+    color: #d5d5d5;
+}
+
+.dark-mode .tag-entry a:hover {
+    color: #a3c99a;
+}
+
+.dark-mode .entry-date {
+    color: #888;
+}
+
+
+
+/* ============================================================
+   29. PROFILES PAGE — DYNAMIC UI
+   Moved from profiles.html's own inline <style> block, which was
+   silently overriding the shared .toc-* dark-mode rules elsewhere
+   in this file (same class names, page's inline block loaded
+   later = always won). Renamed to a profile- prefix throughout
+   to prevent that collision from ever recurring. This is a
+   genuinely different TOC design from the newsletter/activities
+   one (button-based switching, not link navigation), so it's
+   correctly kept as its own separate set of rules, not merged.
+   ============================================================ */
+
+
+    /* ============================================================
+       2. PAGE WRAPPER
+       ============================================================
+       Outermost container for all page content. Kept display:block
+       to avoid accidental flex/grid conflicts with parent themes.
+    ============================================================ */
+    .profiles-page-container {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100%;
+      margin: 0.5vw auto 30px auto;
+      padding: 0 !important;
+      box-sizing: border-box;
+    }
+
+
+    /* ============================================================
+       3. YEAR NAVIGATION BAR
+       ============================================================
+       Horizontal pill-style tab list rendered at the top of the
+       page. Each <li> represents one academic year pulled from
+       Jekyll profile front-matter. Active state is tracked via
+       the .active class toggled by filterAcademicYear().
+    ============================================================ */
+    .profile-sub-nav-options {
+      display: block !important;
+      width: 100% !important;
+      margin: 0 auto 2rem auto !important;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    .profile-sub-nav-list {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+      gap: 2.5rem;
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      flex-wrap: wrap; /* wraps gracefully on narrow viewports */
+    }
+
+    .profile-sub-nav-list li {
+      font-family: 'Amatic SC', cursive !important;
+      font-size: 2rem !important;
+      color: #718096;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      padding-bottom: 5px;
+      border-bottom: 3px solid transparent; /* placeholder so layout doesn't shift on active */
+    }
+
+    /* Hover and active states share the same green-grey accent colour */
+    .profile-sub-nav-list li:hover,
+    .profile-sub-nav-list li.active {
+      color: #5f745f !important;
+      border-bottom: 3px solid #5f745f;
+      font-weight: bold;
+    }
+
+    /* Accessibility: these are now keyboard-focusable (role="button"
+       tabindex="0" added in profiles.html) -- gives them the same
+       custom focus ring as the other interactive controls on this
+       page, instead of relying on each browser's own default outline. */
+    .profile-sub-nav-list li:focus-visible {
+      outline: 3px solid #8FA186;
+      outline-offset: 2px;
+    }
+
+
+    /* ============================================================
+       4. TWO-COLUMN LAYOUT
+       ============================================================
+       .profiles-layout-wrapper   — flex row: sidebar + content
+       .profile-toc-sidebar               — sticky left column (240px)
+       .profile-toc-card                  — white card housing the TOC
+       .profiles-content          — grows to fill remaining width
+    ============================================================ */
+    .profiles-layout-wrapper {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      align-items: flex-start;
+      padding: 0 15px;
+      box-sizing: border-box;
+    }
+
+    /* Sidebar stays visible while user scrolls through cards.
+       top: 90px = the fixed navbar's real clearance (~80px, same value
+       .intro-header uses elsewhere) plus a small visible gap -- matches
+       the same fix applied to .toc-sidebar (Newsletter/Activities/Tags).
+
+       MAINTENANCE NOTE: .toc-sidebar (Newsletter/Activities/Tags, earlier
+       in this file) is a separate implementation of the same idea, kept
+       in sync only by hand -- see the matching note on that rule. */
+    .profile-toc-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 90px;
+    }
+
+    /* Sage-green card matching the Newsletter/Activities TOC look
+       (.toc-card), instead of the previous plain white box. */
+    .profile-toc-card {
+      background: #BDCDC0;
+      border: none;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .profile-toc-title {
+      /* !important needed: the global h2 rule (section 1 typography)
+         also uses !important with a much larger clamp()-based font-size
+         and its own margin-top/bottom — without !important here, that
+         global rule would win instead. Styling now matches the
+         Newsletter/Activities TOC title (.toc-title): Amatic SC font,
+         uppercase, dark underline. */
+      font-family: 'Amatic SC', cursive !important;
+      font-size: clamp(2rem, 1.5rem + 1.5vw, 3.5rem) !important;
+      font-weight: bold !important;
+      margin: 0 0 15px 0 !important;
+      color: #404040 !important;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .profile-toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .profile-toc-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    /*
+      Each TOC entry is a <button> (not a link) because clicking
+      it swaps the visible panel in-place rather than navigating.
+    */
+    /* Font-matched to the Newsletter/Activities TOC list (.toc-list a):
+       Amatic SC, bold, same dark color. */
+    .profile-toc-list button {
+      background: none;
+      border: none;
+      font-family: 'Amatic SC', cursive !important;
+      font-weight: bold !important;
+      font-size: clamp(1.2rem, 0.8rem + 1vw, 2.2rem) !important;
+      color: #404040 !important;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    /* Active/hovered TOC button highlights green-grey */
+    .profile-toc-list button:hover,
+    .profile-toc-list button.active {
+      color: #5f745f !important;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    /* Accessibility: outline: none above removed the default focus
+       indicator with no replacement -- a keyboard user tabbing through
+       this category sidebar previously got no visible indication of
+       focus at all (the hover/active styles above only apply on mouse
+       hover or after a category is already selected, not while
+       simply tabbing through). */
+    .profile-toc-list button:focus-visible {
+      outline: 3px solid #8FA186;
+      outline-offset: 2px;
+    }
+
+    /* The right-hand content area grows to fill remaining space */
+    .profiles-content {
+      flex-grow: 1;
+      width: 100%;
+    }
+
+
+    /* ============================================================
+       5. GRADE SECTION PANELS
+       ============================================================
+       Each category (e.g. "Grade 12", "Teachers") is rendered as
+       a .grade-section. Only the one with .active is visible at
+       any time. Switching is handled by switchGradePane().
+    ============================================================ */
+
+    /* All panels hidden by default; JS adds .active to show one */
+    .grade-section {
+      display: none;
+      margin-bottom: 3rem;
+      animation: paneFadeIn 0.35s ease; /* subtle fade-in on reveal */
+    }
+
+    .grade-section.active {
+      display: block;
+    }
+
+    /* Section heading (e.g. "Grade 12") displayed above the card grid */
+    /* Styling matched to the Newsletter/Activities category heading
+       (.category-heading): Amatic SC font, uppercase, mauve underline. */
+    .profile-category-heading {
+      font-family: 'Amatic SC', sans-serif !important;
+      font-weight: bold !important;
+      text-transform: uppercase !important;
+      font-size: clamp(1.75rem, 1.25rem + 2.73vw, 5rem) !important;
+      border-bottom: 2px solid #735362;
+      padding-bottom: 10px;
+      margin-bottom: 25px;
+      color: #404040;
+    }
+
+    /* Fade-in keyframe used when a new panel becomes active */
+    @keyframes paneFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    /* ============================================================
+       6. PROFILE CARD GRID
+       ============================================================
+       Cards use flex-wrap so they reflow naturally across widths.
+       Each card links to the individual profile page.
+    ============================================================ */
+    .profile-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 !important;
+      /* justify-content: center (was flex-start) so a lone leftover
+         card in an incomplete last row centers instead of sitting
+         pinned to the left. */
+      justify-content: center;
+      width: 100%;
+    }
+
+    /*
+      Cards flex between 340px min and 480px max. This means:
+        - 1 card per row on narrow containers
+        - 2–3 cards per row on wider containers
+    */
+    .profile-card {
+      /* Increased min-basis from 340px so fewer, larger cards fit per
+         row on average, which also enlarges the avatar circle inside
+         (sized as a percentage of the card's own width).
+         flex-grow set to 0 (was 1): with grow:1, a single leftover
+         card in an incomplete last row had no siblings to share extra
+         space with, so it stretched much larger than the cards above
+         it. flex-grow:0 keeps every card the same size regardless of
+         how many share its row. */
+      flex: 0 1 420px;
+      width: 420px;
+      max-width: 560px !important;
+      margin: 0 !important;
+      padding: 30px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none !important; /* remove default link underline */
+      color: inherit !important;        /* inherit page text colour */
+      transition: transform 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    /* Lift card slightly on hover to indicate clickability */
+    .profile-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Circular image container — maintains 1:1 aspect ratio */
+    .profile-img-wrapper {
+      width: 90%;
+      max-width: 460px;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 50%;
+      border: 4px solid #c5d1c0;
+      margin-bottom: 18px;
+    }
+
+    .profile-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* crops image to fill circle without distortion */
+    }
+
+    .profile-card .profile-name {
+      font-size: 1.7rem !important;
+      font-weight: bold;
+      text-align: center;
+      margin: 4px 0 2px 0;
+      white-space: normal;
+    }
+
+    .profile-card .profile-role {
+      font-size: 1.15rem !important;
+      text-align: center;
+      color: #707070;
+      white-space: normal;
+    }
+
+    /* Shown when a year has no profiles assigned to it */
+    .no-profiles-msg {
+      color: #718096;
+      font-style: italic;
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+
+    /* ============================================================
+       7. RESPONSIVE BREAKPOINTS
+       ============================================================
+       ≤991px  — sidebar moves above the card grid (stacked layout)
+       ≤480px  — each card takes full width (single-column grid)
+    ============================================================ */
+    @media (max-width: 991px) {
+      .profiles-layout-wrapper {
+        flex-direction: column; /* stack sidebar above content */
+      }
+
+      .profile-toc-sidebar {
+        width: 100%;
+        position: relative; /* un-stick: no room to stick beside stacked content */
+        top: 0;
+        margin-bottom: 2rem;
+      }
+
+      /* TOC buttons wrap horizontally on tablet/mobile */
+      .profile-toc-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .profile-toc-list li {
+        margin-bottom: 0;
+      }
+
+      /* Buttons shrink to auto width when wrapping horizontally */
+      .profile-toc-list button {
+        width: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* Single-column card grid on small phones */
+      .profile-card {
+        flex: 0 0 100%;
+        max-width: 100% !important;
+        padding: 24px 12px;
+      }
+    }
+
+/* Dark mode — this is the fix that was silently ineffective before,
+   since profiles.html's own inline .toc-card etc. was overriding it. */
+.dark-mode .profile-toc-card {
+    background: #1f2a1f;
+    border-color: #444;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.dark-mode .profile-toc-title {
+    /* !important needed: the light-mode base rule also has !important
+       on color (added to match the Newsletter TOC's font/color styling),
+       so this override needs it too to actually win in dark mode. */
+    color: #e8f3df !important;
+}
+.dark-mode .profile-toc-list button {
+    /* !important needed for the same reason as .profile-toc-title above */
+    color: #cfd8cc !important;
+}
+.dark-mode .profile-toc-list button:hover,
+.dark-mode .profile-toc-list button.active {
+    color: #ffffff !important;
+}
+.dark-mode .profile-sub-nav-options {
+    border-bottom-color: #444;
+}
+.dark-mode .profile-sub-nav-list li {
+    color: #a0aec0;
+}
+.dark-mode .profile-category-heading {
+    color: #e8f3df;
+    border-bottom-color: #444;
+}
+.dark-mode .profile-card .profile-role {
+    color: #a0aec0;
+}
+.dark-mode .no-profiles-msg {
+    color: #a0aec0;
+}
+
+
+/* ============================================================
+   30. YEAR/ALBUM SUB-NAVIGATION BAR (photos.html, videos.html)
+   Identical pill-tab design shared by both pages, moved from
+   their separate inline <style> blocks.
+   ============================================================ */
+
+.sub-nav-options {
+    width: 100%;
+    margin: 0 auto 3rem auto;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.sub-nav-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+}
+
+.sub-nav-list li {
+    font-family: 'Amatic SC', cursive;
+    font-size: 2rem;
+    color: #718096;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    padding-bottom: 5px;
+    border-bottom: 3px solid transparent;
+}
+
+.sub-nav-list li:hover,
+.sub-nav-list li.active {
+    color: #5f745f;
+    border-bottom: 3px solid #5f745f;
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sub-nav-list { gap: 1.5rem; }
+}
+
+
+/* ============================================================
+   31. VIDEOS PAGE (videos.html)
+   Moved from videos.html's own inline <style> block. Renamed
+   with a videos-page- prefix since kfi.html separately uses the
+   plain .video-grid/.video-item/.video-wrapper classes (section
+   10) for a visually different design (padding-bottom aspect
+   ratio trick vs this page's modern aspect-ratio property) —
+   giving each its own name avoids one silently overriding the
+   other based on source order.
+   ============================================================ */
+
+.videos-page-container {
+    display: block;
+    width: 100%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* Switched from CSS Grid to Flexbox: Grid's auto-fill tracks
+   always left-align an incomplete last row. Flexbox's
+   justify-content: center naturally centers any incomplete row
+   (same fix already applied to photos.html's album grid). */
+.videos-page-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.videos-page-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 280px;
+    max-width: 340px;
+    margin: 0;
+}
+
+.videos-page-wrapper {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #000;
+    cursor: pointer;
+}
+
+.videos-page-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.videos-page-item figcaption {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 8px;
+}
+
+@media (max-width: 992px) {
+    .videos-page-item {
+        flex-basis: 160px;
+    }
+}
+
+
+/* ============================================================
+   32. PHOTOS PAGE — ALBUM GRID (photos.html)
+   Moved from photos.html's own inline <style> block. Renamed
+   with a photos-album- prefix since the shared .album-grid/
+   .album-item classes (section 9) are used by regular posts
+   (e.g. photo.md) with slightly different sizing — giving this
+   page's version its own name avoids one silently overriding
+   the other based on source order (this collision was the
+   original bug reported: photos.html's incomplete last row of
+   photos wasn't centering, because the fix had been applied to
+   the wrong, non-active definition).
+   ============================================================ */
+
+.photos-album-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.photos-album-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 280px;
+    max-width: 340px;
+    margin: 0;
+}
+
+.photos-album-item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.photos-album-item figcaption {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 8px;
+}
+
+@media (max-width: 992px) {
+    .photos-album-item {
+        flex-basis: 160px;
+    }
+}
+
+
+/* ============================================================
+   33. KFI PAGE — VIDEO/EXCERPT FILTER BEHAVIOR (kfi.html)
+   Moved from kfi.html's own inline <style> block. Layers on top
+   of the shared .video-item card styling (section 10) — no rename
+   needed since this only touches the display property for a
+   JS-driven show/hide filter, which doesn't conflict with the
+   shared class's flex/margin sizing properties.
+   ============================================================ */
+
+.video-item {
+    display: none;
+}
+
+.video-item.active-view {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+/* Excerpt/caption text was already inheriting Montserrat from the
+   sitewide body/p/div rule (section 1) once that font was actually
+   loaded, but declaring it explicitly here matches how every other
+   page's text (.post-entry, .post-meta, etc.) is set, rather than
+   relying on inheritance alone. */
+.video-caption {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+
+/* ============================================================
+   34. LIGHT/DARK DEFAULT PROFILE PHOTO TOGGLE
+   Used on both the individual profile page (.profile-pic-light/
+   .profile-pic-dark) and the profiles grid (same classes inside
+   .profile-img-wrapper). Both images are always rendered in the
+   DOM; only one is shown at a time based on the .dark-mode class,
+   so switching the toggle updates instantly with no JS re-render
+   needed. Has no effect on profiles with a real photo set, since
+   both images resolve to the same URL in that case.
+   ============================================================ */
+
+.profile-pic-dark {
+    display: none;
+}
+
+.dark-mode .profile-pic-light {
+    display: none;
+}
+
+.dark-mode .profile-pic-dark {
+    display: block;
+}
+
+/* ============================================================
+   35. COMMENTS WIDGET (Firebase)
+   Moved from _includes/firebase-comments.html's own inline <style>
+   block. Uses the site's actual theme variables (--text-col,
+   --link-col, --hover-col, --navbar-col, --navbar-border-col, from
+   :root in beautifuljekyll.css / _config.yml) instead of a separate
+   hand-picked palette, and the site's fonts (--header-font for the
+   heading/names, --body-font elsewhere) so it matches every other
+   page instead of looking like a bolted-on widget. The "Sign in"
+   button follows the same solid-fill pill pattern as .tag-btn.
+   ============================================================ */
+
+/* 100vw can be slightly wider than the visible viewport when a vertical
+   scrollbar is present, which the #comments-section full-bleed below
+   would otherwise turn into an unwanted page-level horizontal scrollbar.
+   Scoped to html only (not body) -- setting overflow-x on body turns it
+   into a scroll container in its own right, which silently breaks
+   position: sticky for descendants like .toc-sidebar (the sticky
+   Editions/table-of-contents card). html alone is enough to suppress the
+   scrollbar without that side effect. */
+html {
+    overflow-x: hidden;
+}
+
+#comments-section {
+    --sc-line: rgba(62, 56, 48, 0.18);
+    --sc-muted: #5b564c;
+    --sc-active-bg: rgba(255, 255, 255, 0.55);
+
+    /* Full-bleed: break out of the parent column (e.g. .col-lg-8) so this
+       spans the entire screen width edge-to-edge, regardless of how
+       narrow the content column around it is. Direct children are then
+       constrained to 80% width below, centered -- this section is a
+       full-width *band*, but its *content* uses 80% of the screen. */
+    width: 100vw;
+    max-width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: 3em;
+    margin-bottom: 0;
+    padding: 3em clamp(20px, 6vw, 80px) 3.5em;
+    box-sizing: border-box;
+
+    /* Same green as the footer directly below, so the two bands read as
+       one continuous, clearly intentional section of the page rather
+       than a faint, washed-out patch of near-white. */
+    /* A lighter tint of the footer's green -- keeps the same family of
+       color so it still reads as one continuous section leading into
+       the footer, just softer. */
+    background-color: #E1E7DD; /* fallback for browsers without color-mix() */
+    background-color: color-mix(in srgb, var(--footer-col, #B2C2AD) 30%, white);
+    border-top: 1px solid var(--navbar-border-col, #BBC4B4);
+
+    font-family: var(--body-font);
+    color: var(--footer-text-col, var(--text-col));
+}
+
+/* Constrain each direct child to 80% of the screen width, centered,
+   within the full-width band above. */
+#comments-section > * {
+    width: 80%;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Heading row: title + count + sort dropdown --- */
+.sc-heading-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1em;
+    flex-wrap: wrap;
+    margin-bottom: 1.1em;
+}
+
+.sc-heading-row h3 {
+    font-family: var(--header-font);
+    font-size: 1.6em;
+    margin: 0;
+    color: var(--footer-text-col, var(--text-col));
+}
+
+.sc-count {
+    font-size: 0.6em;
+    font-family: var(--body-font);
+    color: var(--sc-muted);
+    margin-left: 0.3em;
+}
+
+.sc-sort-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-family: var(--body-font);
+    font-size: 0.9rem;
+    border: 1px solid rgba(62, 56, 48, 0.35);
+    background-color: var(--page-col);
+    color: var(--text-col);
+    padding: 0.5em 2.2em 0.5em 1em;
+    border-radius: 20px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%233E3830' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9em center;
+    transition: border-color 0.15s ease;
+}
+
+.sc-sort-select:hover,
+.sc-sort-select:focus {
+    outline: none;
+    border-color: var(--navbar-col);
+}
+
+/* --- Auth row --- */
+#comments-auth {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1.5em;
+}
+
+.sc-btn {
+    display: inline-block;
+    font-family: 'Poiret One', system-ui, sans-serif;
+    font-size: 0.95rem;
+    background-color: var(--navbar-col) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 20px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.sc-btn:hover {
+    background-color: var(--hover-col) !important;
+    color: #ffffff !important;
+}
+
+.sc-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.sc-btn-small {
+    padding: 5px 14px;
+    font-size: 0.85rem;
+}
+
+.sc-btn-ghost {
+    background-color: transparent !important;
+    color: var(--sc-muted) !important;
+    border: 1px solid var(--sc-line) !important;
+    padding: 5px 14px;
+    font-size: 0.85rem;
+}
+
+.sc-btn-ghost:hover {
+    background-color: transparent !important;
+    border-color: var(--navbar-col) !important;
+    color: var(--text-col) !important;
+}
+
+#comments-user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    font-size: 0.9em;
+    color: var(--sc-muted);
+}
+
+#comments-user-info strong {
+    color: var(--text-col);
+    font-weight: 600;
+}
+
+/* --- Comment form --- */
+#comments-form {
+    margin-bottom: 2.5em;
+}
+
+.sc-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-col);
+    background-color: var(--page-col);
+    border: 1px solid var(--sc-line);
+    padding: 0.9em;
+    resize: vertical;
+    min-height: 5.5em;
+}
+
+.sc-textarea:focus {
+    outline: none;
+    border-color: var(--hover-col);
+}
+
+.sc-char-count {
+    display: block;
+    text-align: right;
+    font-size: 0.8em;
+    color: var(--sc-muted);
+    margin-top: 0.3em;
+}
+
+.sc-char-count.sc-near-limit {
+    color: #b3552f;
+}
+
+#comments-form .sc-btn {
+    margin-top: 0.6em;
+}
+
+/* --- Feed --- */
+#comments-feed {
+    border-top: 1px solid var(--sc-line);
+}
+
+#comments-loading,
+.sc-empty,
+.sc-error {
+    color: var(--sc-muted);
+    font-style: italic;
+    font-size: 0.9em;
+    padding: 1.5em 0;
+    margin: 0;
+}
+
+.sc-comment-thread {
+    border-bottom: 1px solid var(--sc-line);
+    padding: 1.3em 0;
+}
+
+.sc-comment-thread:last-child {
+    border-bottom: none;
+}
+
+.sc-comment {
+    display: flex;
+    gap: 0.9em;
+}
+
+.sc-avatar {
+    flex: none;
+    width: 2.3em;
+    height: 2.3em;
+    border-radius: 50%;
+    background-color: var(--navbar-col);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--header-font);
+    font-size: 0.95em;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.sc-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sc-comment-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.sc-comment-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6em;
+    flex-wrap: wrap;
+}
+
+.sc-comment-name {
+    font-family: var(--header-font);
+    font-size: 1.05em;
+    color: var(--text-col);
+}
+
+.sc-comment-time,
+.sc-edited-tag {
+    font-size: 0.78em;
+    color: var(--sc-muted);
+}
+
+.sc-edited-tag {
+    font-style: italic;
+}
+
+.sc-comment-text {
+    margin: 0.35em 0 0;
+    font-size: 0.95em;
+    line-height: 1.55;
+    color: var(--text-col);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.sc-comment-text.sc-deleted-text {
+    font-style: italic;
+    color: var(--sc-muted);
+}
+
+/* --- Actions row: like, reactions, reply, edit, delete --- */
+.sc-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    margin-top: 0.7em;
+}
+
+.sc-like-btn,
+.sc-emoji-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-family: var(--body-font);
+    font-size: 0.85em;
+    background-color: var(--page-col);
+    border: 1px solid var(--sc-line);
+    border-radius: 999px;
+    padding: 0.3em 0.7em;
+    color: var(--sc-muted);
+    cursor: pointer;
+    line-height: 1;
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.sc-like-btn:hover,
+.sc-emoji-btn:hover {
+    border-color: var(--hover-col);
+}
+
+.sc-like-btn.sc-active {
+    background-color: var(--sc-active-bg);
+    border-color: var(--hover-col);
+    color: var(--navbar-col);
+}
+
+.sc-emoji-btn.sc-active {
+    background-color: var(--sc-active-bg);
+    border-color: var(--hover-col);
+    color: var(--text-col);
+}
+
+.sc-emoji-btn .sc-emoji-count,
+.sc-like-btn .sc-like-count {
+    font-size: 0.9em;
+    font-variant-numeric: tabular-nums;
+}
+
+.sc-text-btn {
+    background: none;
+    border: none;
+    padding: 0.3em 0.2em;
+    font-family: var(--body-font);
+    font-size: 0.85em;
+    color: var(--sc-muted);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.sc-text-btn:hover {
+    color: var(--text-col);
+}
+
+/* --- Replies --- */
+.sc-replies {
+    margin-left: 3.1em;
+    margin-top: 0.9em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.sc-replies .sc-comment {
+    padding-top: 0.2em;
+}
+
+/* --- Inline reply composer --- */
+.sc-reply-compose {
+    margin-top: 0.8em;
+}
+
+.sc-reply-compose textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--body-font);
+    font-size: 0.9em;
+    color: var(--text-col);
+    background-color: var(--page-col);
+    border: 1px solid var(--sc-line);
+    padding: 0.6em;
+    min-height: 4em;
+    resize: vertical;
+}
+
+.sc-reply-compose textarea:focus {
+    outline: none;
+    border-color: var(--hover-col);
+}
+
+.sc-reply-compose-actions {
+    margin-top: 0.5em;
+    display: flex;
+    gap: 0.5em;
+}
+
+@media (max-width: 480px) {
+    #comments-auth {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .sc-replies {
+        margin-left: 1.6em;
+    }
+}
+
+/* --- Dark mode --- */
+.dark-mode #comments-section {
+    color: #d5d5d5;
+    --sc-line: rgba(213, 213, 213, 0.2);
+    --sc-muted: #9a9a9a;
+    --sc-active-bg: #2a3d2a;
+    background-color: #141713;
+    border-top-color: #3a4a3a;
+}
+
+.dark-mode #comments-section h3,
+.dark-mode .sc-comment-name {
+    color: #e8f3df;
+}
+
+.dark-mode .sc-btn {
+    background-color: #3a5a3a !important;
+}
+
+.dark-mode .sc-btn:hover {
+    background-color: #4a6e4a !important;
+}
+
+.dark-mode .sc-btn-ghost {
+    color: #9a9a9a !important;
+    border-color: #3a4a3a !important;
+}
+
+.dark-mode .sc-btn-ghost:hover {
+    border-color: #5a6a56 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .sc-textarea,
+.dark-mode .sc-reply-compose textarea {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    border-color: #3a4a3a;
+}
+
+.dark-mode .sc-sort-select {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    border-color: #3a4a3a;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23e0e0e0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.dark-mode .sc-comment-text {
+    color: #d5d5d5;
+}
+
+.dark-mode .sc-avatar {
+    background-color: #3a5a3a;
+}
+
+.dark-mode .sc-like-btn,
+.dark-mode .sc-emoji-btn {
+    background-color: #1a1a1a;
+    border-color: #3a4a3a;
+}
+
+.dark-mode .sc-like-btn.sc-active,
+.dark-mode .sc-emoji-btn.sc-active {
+    background-color: #2a3d2a;
+    border-color: #5a8a5a;
+    color: #e8f3df;
+}
+
+.dark-mode .sc-text-btn {
+    color: #9a9a9a;
+}
+
+.dark-mode .sc-text-btn:hover {
+    color: #e0e0e0;
+}
+
